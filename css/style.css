@@ -1,0 +1,38 @@
+body {
+    font-family: Monospace;
+    background-color: #000;
+    color: #fff;
+    margin: 0px;
+    overflow: hidden;
+}
+
+#title {
+    color: darkgray;
+    font-size: 25px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #fff;
+    letter-spacing: normal;
+
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+    display: block;
+}
+
+
+#info {
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: normal;
+
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+    display: block;
+}
+
