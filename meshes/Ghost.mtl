@@ -1,0 +1,15 @@
+# Blender MTL File: 'Ghost_LowPoly.blend'
+# Material Count: 1
+
+newmtl Ghost
+Ns 56.862745
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\Ghost_Dif.jpg
+map_Bump textures\\Ghost1_NOR.png
+map_Ke textures\\Ghost_Emit.jpg
+map_Ks textures\\Ghost_SPC.jpg
