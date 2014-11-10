@@ -40,7 +40,7 @@ var C3DWorld = function (WaterScene) {
         _scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
         _scene.position.set(0, 0, 0);
 
-        _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 3000000); //creando la cámara
+        _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
         _camera.position.set(-25, 50, 0);
         //_camera.rotation.set(0, 0, 0);
         _camera.lookAt(_scene.position);
@@ -163,13 +163,13 @@ var C3DWorld = function (WaterScene) {
         var cntr = new THREE.TrackballControls(_camera);
 
         cntr.rotateSpeed = 0.8;
-        cntr.zoomSpeed = 25.0;
-        cntr.panSpeed = 5.0;
+        cntr.zoomSpeed = 10.0;
+        cntr.panSpeed = 2.0;
 
         cntr.noZoom = false;
         cntr.noPan = false;
 
-        cntr.staticMoving = false;
+        cntr.staticMoving = true;
         cntr.dynamicDampingFactor = 0.3;
 
         cntr.keys = [65, 83, 68];

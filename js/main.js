@@ -6,6 +6,7 @@ window.onload = main;
 
 var MapCAVE;
 var Agent;
+
 var CaveScene;
 var Renderer;
 var Camera;
@@ -21,7 +22,7 @@ function main() {
     Renderer = MapCAVE.get_Renderer();
     Camera = MapCAVE.get_Camera();
 
-    Agent = new CCartographerAgent(CaveScene, Renderer, Camera, 0.05, 'red', 0, 5);
+    Agent = new CCartographerAgent(CaveScene, Renderer, Camera, 0.02, 0, 5);
 
     set_HTMLObjects();
 
