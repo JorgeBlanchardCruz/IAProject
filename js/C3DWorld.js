@@ -17,7 +17,7 @@ var C3DWorld = function (WaterScene) {
     var _scene, _renderer, _camera, _controls;
     var _objLoad, _water, _directionalLight;
 
-    var _MapWidth = 0, _MapHeight = 0;
+    var _MapWidth = 16, _MapHeight = 16;
     
     //INITIALIZE
     init();
@@ -39,7 +39,7 @@ var C3DWorld = function (WaterScene) {
         _scene.position.set(0, 0, 0);
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
-        _camera.position.set(-25, 50, 0);
+        _camera.position.set(0, 50, -25);
         //_camera.position.set(-25, 50, 0);
         //_camera.rotation.set(0, 0, 0);
         _camera.lookAt(_scene.position);
@@ -212,7 +212,7 @@ var C3DWorld = function (WaterScene) {
 
     function Create_cube(h, w, l, color, x, y, z) {
         var cube = new THREE.Mesh(new THREE.BoxGeometry(h, w, l), new THREE.MeshLambertMaterial({ color: color }));
-        cube.id = Number('10' + x.toString() + '10' + z.toString());
+        cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.position.set(x, y, z);
         cube.castShadow = true;
         cube.receiveShadow = true;
@@ -331,7 +331,7 @@ var C3DWorld = function (WaterScene) {
     //METHODS    
         //-------------------------------------------------------
         //getters
-        this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight } }
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight }; }
 
         //setters
 
@@ -339,7 +339,6 @@ var C3DWorld = function (WaterScene) {
     
     this.Create_CaveofMapfile = function (file) {
         var reader = new FileReader();
-
         reader.onload = function (progressEvent) {
             //separa el contenido del fichero por \n
             var content = this.result.split('\n');
@@ -369,10 +368,11 @@ var C3DWorld = function (WaterScene) {
                 var z = line.substring(0, line.lastIndexOf(SEP_ATTRIBUTE));
                 var x = line.substring(line.lastIndexOf(SEP_ATTRIBUTE) + 1, line.length);
                 
-                var id = Number('10' + Number(x) + '10' + Number(z));
+                var id = Number('10' + Number(z) + '10' + Number(x));
                 var selectedObject = _scene.getObjectById(id);
                 _scene.remove(selectedObject);
             }
+
         };
 
         reader.readAsText(file);

@@ -14,7 +14,7 @@ var CMothership = function (Params) {
 
     //PROCEDURES
     function init() {
-        _Agent = new CCartographerAgent(Params, 0.02, 0, 5);
+        _Agent = new CCartographerAgent(Params, 0.05, 0, 10);
     }
 
     //METHODS

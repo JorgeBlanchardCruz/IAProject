@@ -44,7 +44,8 @@ function Add_Events() {
 
     file_input.onchange = function () {
         MapCAVE.Create_CaveofMapfile(this.files[0]);
-        MapParams = MapCAVE.get_Params();
+
+        //MapParams = MapCAVE.get_Params();
         MotherSHIP = new CMothership(MapParams);
     };
 }
@@ -63,7 +64,8 @@ function FullScreen(element) {
 
 
 function AgentMove(event) {
-    MotherSHIP.Agent().Move(event.key);
+    if (MotherSHIP != null)
+        MotherSHIP.Agent().Move(event.key);
 }
 
 
