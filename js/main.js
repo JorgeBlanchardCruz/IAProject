@@ -5,25 +5,17 @@ window.onload = main;
 
 
 var MapCAVE;
-var Agent;
+var MotherSHIP;
 
-var CaveScene;
-var Renderer;
-var Camera;
+var MapParams;
 
 var file_input;
-
 
 function main() {
 
     MapCAVE = new C3DWorld(true);
-
-    CaveScene = MapCAVE.get_Scene();
-    Renderer = MapCAVE.get_Renderer();
-    Camera = MapCAVE.get_Camera();
-
-    Agent = new CCartographerAgent(CaveScene, Renderer, Camera, 0.02, 0, 5);
-
+    MapParams = MapCAVE.get_Params();
+    
     set_HTMLObjects();
 
     Add_Events();
@@ -50,7 +42,11 @@ function Add_Events() {
 
     document.onkeypress = AgentMove;
 
-    file_input.onchange = function () { MapCAVE.Create_CaveofMapfile(this.files[0]); };
+    file_input.onchange = function () {
+        MapCAVE.Create_CaveofMapfile(this.files[0]);
+        MapParams = MapCAVE.get_Params();
+        MotherSHIP = new CMothership(MapParams);
+    };
 }
 
 function FullScreen(element) {
@@ -67,16 +63,16 @@ function FullScreen(element) {
 
 
 function AgentMove(event) {
-    Agent.Move(event.key);
+    MotherSHIP.Agent().Move(event.key);
 }
 
 
 //EVENTS
 function onWindowResize() {
-    Camera.aspect = window.innerWidth / window.innerHeight;
-    Camera.updateProjectionMatrix();
+    MapParams.camera.aspect = window.innerWidth / window.innerHeight;
+    MapParams.camera.updateProjectionMatrix();
 
-    Renderer.setSize(window.innerWidth, window.innerHeight);
+    MapParams.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 //function onDocumentMouseMove(event) {

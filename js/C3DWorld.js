@@ -4,28 +4,26 @@
  * 
  */
 
-
-
 var C3DWorld = function (WaterScene) {
     "use strict";
 
     //ATTRIBUTES
-    var SEP_ATTRIBUTE = ',';
-    var COLOR_BACKGROUNDSCENE = '#E5E8D3';
-    var COLOR_MAPPLATAFORM = '#998462';
-    var COLOR_BLOCK0 = 'white';
+    const SEP_ATTRIBUTE = ',';
+    const COLOR_BACKGROUNDSCENE = '#E5E8D3';
+    const COLOR_MAPPLATAFORM = '#998462';
+    const COLOR_BLOCK0 = 'white';
 
     var _container;
     var _scene, _renderer, _camera, _controls;
     var _objLoad, _water, _directionalLight;
 
+    var _MapWidth = 0, _MapHeight = 0;
     
     //INITIALIZE
-    Initialize();
-
+    init();
 
     //PROCEDURES
-    function Initialize() {
+    function init() {
         _container = document.createElement('div');
         document.body.appendChild(_container);
 
@@ -42,6 +40,7 @@ var C3DWorld = function (WaterScene) {
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
         _camera.position.set(-25, 50, 0);
+        //_camera.position.set(-25, 50, 0);
         //_camera.rotation.set(0, 0, 0);
         _camera.lookAt(_scene.position);
 
@@ -170,7 +169,7 @@ var C3DWorld = function (WaterScene) {
         cntr.noPan = false;
 
         cntr.staticMoving = true;
-        cntr.dynamicDampingFactor = 0.3;
+        cntr.dynamicDampingFactor = 50;
 
         cntr.keys = [65, 83, 68];
 
@@ -213,7 +212,7 @@ var C3DWorld = function (WaterScene) {
 
     function Create_cube(h, w, l, color, x, y, z) {
         var cube = new THREE.Mesh(new THREE.BoxGeometry(h, w, l), new THREE.MeshLambertMaterial({ color: color }));
-        cube.id = Number(x.toString() + '100' + z.toString())
+        cube.id = Number('10' + x.toString() + '10' + z.toString());
         cube.position.set(x, y, z);
         cube.castShadow = true;
         cube.receiveShadow = true;
@@ -317,17 +316,22 @@ var C3DWorld = function (WaterScene) {
         });
     }
 
-      
+    function getObjectByName (namesearch) {
+        for (var i = 0, l = _scene.children.length; i < l; i ++) {
+            var child = _scene.children[i];
+            var name = child.name.toString();
+            if (name == namesearch) {
+                return child;
+            }
+        }
+        return undefined;
+    }
 
-    //METHODS
-        
+
+    //METHODS    
         //-------------------------------------------------------
         //getters
-        this.get_Camera = function () { return _camera; };
-
-        this.get_Renderer = function () { return _renderer; };
-
-        this.get_Scene = function () { return _scene; };
+        this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight } }
 
         //setters
 
@@ -337,19 +341,21 @@ var C3DWorld = function (WaterScene) {
         var reader = new FileReader();
 
         reader.onload = function (progressEvent) {
-
             //separa el contenido del fichero por \n
             var content = this.result.split('\n');
 
             //recogemos las dimensiones del mapa
-            var width = content[0].substring(0, content[0].lastIndexOf('x'));
-            var height = content[0].substring(content[0].lastIndexOf('x') + 1, content[0].length);
-
-            width = Number(width); height = Number(height);
+            var height = content[0].substring(0, content[0].lastIndexOf('x'));
+            var width = content[0].substring(content[0].lastIndexOf('x') + 1, content[0].length);
+    
+            width = Number(width);
+            height = Number(height);
+            _MapWidth = width;
+            _MapHeight = height;
 
             //Creamos los bloques ocupando todo el mapa
-            for (var x = 0; x < height; x++)
-                for (var z = 0; z < width; z++)
+            for (var x = 0; x < width ; x++)
+                for (var z = 0; z < height; z++)
                     Create_cube(1, 1, 1, COLOR_BLOCK0, x, 0, z);
 
             //crea una plataforma (cubo) donde sustentar el mapa
@@ -360,10 +366,11 @@ var C3DWorld = function (WaterScene) {
             for (var i = 1; i < content.length; i++) {
 
                 var line = content[i];
-                var x = line.substring(0, line.lastIndexOf(SEP_ATTRIBUTE));
-                var z = line.substring(line.lastIndexOf(SEP_ATTRIBUTE) + 1, line.length);
-
-                var selectedObject = _scene.getObjectById(Number(x.toString() + '100' + z.toString()));
+                var z = line.substring(0, line.lastIndexOf(SEP_ATTRIBUTE));
+                var x = line.substring(line.lastIndexOf(SEP_ATTRIBUTE) + 1, line.length);
+                
+                var id = Number('10' + Number(x) + '10' + Number(z));
+                var selectedObject = _scene.getObjectById(id);
                 _scene.remove(selectedObject);
             }
         };
@@ -403,6 +410,4 @@ var C3DWorld = function (WaterScene) {
         Load_objjs(fileobj);
     };
     
-    
-
 };
