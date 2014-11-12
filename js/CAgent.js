@@ -4,6 +4,7 @@
  * 
  */
 
+//la dimensión 'y' ha sido bloqueada
 var CAgent = function (Params, speed, z, x) {
     "use strict";
 
@@ -79,7 +80,7 @@ var CAgent = function (Params, speed, z, x) {
             case 'd':
                 rotate = Math.degrees(Math.PI / 2) * (-1);
                 break;
-            default:
+            default: 
                 break;
         }
 
@@ -93,10 +94,9 @@ var CAgent = function (Params, speed, z, x) {
     }
 
     function AccionAnimation() {
-        //Al haber rotado el agente (para colocarlo de forma más natural) se ha provocado que cambie su sistema de referencia.
         switch (_movement) {
             case 'w':      
-                _Wheatley.translateZ((CaveBordersDelimeters() == true ? _speed : 0));
+                _Wheatley.translateZ((Borders_Delimeters() ? (Collisions() ? _speed : 0) : 0));
                 break;
             case 'a':
             case 'd':
@@ -109,17 +109,12 @@ var CAgent = function (Params, speed, z, x) {
         }
 
         Swing();
-
-        //recoge las coordenadas globales del mundo 3d de Wheatley
-        //_Wheatley.updateMatrixWorld();
-        //var p = new THREE.Vector3(0, 0, 0);
-        //_Wheatley.localToWorld(p);
         
         //camera_position.innerHTML = 'obj position: ' + _Wheatley.position.x.toFixed(2).toString() + ';' + _Wheatley.position.y.toFixed(2).toString() + ';' + _Wheatley.position.z.toFixed(2).toString();
         camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Wheatley.position.z.toFixed(2).toString() + ' ; ' + _Wheatley.position.x.toFixed(2).toString();
     }
 
-    function CaveBordersDelimeters() {
+    function Borders_Delimeters() {
         var possible = true;
         switch (_direction) { //movimiento Wheatley en el mapa
             case 0: //de frente
@@ -141,6 +136,59 @@ var CAgent = function (Params, speed, z, x) {
         }
         _movement = (possible == false ? 'stop' : _movement);
         return possible;
+    }
+
+    function Collisions() {
+        return true;
+
+        const TOLERANCE = 1.5;
+        const TOLERANCE_EUC = 0.08;
+
+        function CheckCoord(direction, _Wheatleypos, Childpos, Childscale) {
+            var diff = _Wheatleypos - Childpos;
+            if (((direction * diff) >= 0 ) && (Math.abs(diff) <= TOLERANCE)) {
+                var childcoord = Childpos; // + (Childscale / 2);
+                var Euclidean_Distance = Math.sqrt(Math.pow(childcoord - _Wheatleypos, 2))
+                if (Euclidean_Distance <= TOLERANCE_EUC) {
+                    _movement = 'stop';
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        for (var i = 0, l = Params.scene.children.length; i < l; i++) {            
+            var child = Params.scene.children[i];
+            if (child.name == 'obstacle') {
+                //para aligerar computación, descartamos primero los objetos que estan más lejanos
+
+                switch (_direction) { 
+                    case 0: //de frente
+                        //comprueba Z
+                        if (CheckCoord(1, _Wheatley.position.z, child.position.z, child.scale.z) == false)
+                            return false
+                        break;
+                    case 180: //atrás
+                        //comprueba Z
+                        if (CheckCoord(-1, _Wheatley.position.z, child.position.z, child.scale.z))
+                            return false
+                        break;
+                    case 90: //izquierda
+                        //Comprueba X
+                        if (CheckCoord(1, _Wheatley.position.x, child.position.x, child.scale.x))
+                            return false
+                    case 270: //derecha
+                        //Comprueba X
+                        if (CheckCoord(-1, _Wheatley.position.x, child.position.x, child.scale.x))
+                            return false
+                        break;
+                }
+            }
+        }
+
+        return true;
     }
 
     function Swing() {

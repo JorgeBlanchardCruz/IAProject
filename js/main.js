@@ -43,11 +43,13 @@ function Add_Events() {
     document.onkeypress = AgentMove;
 
     file_input.onchange = function () {
-        MapCAVE.Create_CaveofMapfile(this.files[0]);
-
-        //MapParams = MapCAVE.get_Params();
-        MotherSHIP = new CMothership(MapParams);
+        MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership);
     };
+}
+
+function Create_Mothership() { //lo necesito para utilizarlo de callback
+    MapParams = MapCAVE.get_Params();
+    MotherSHIP = new CMothership(MapParams);
 }
 
 function FullScreen(element) {

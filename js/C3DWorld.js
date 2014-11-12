@@ -17,7 +17,7 @@ var C3DWorld = function (WaterScene) {
     var _scene, _renderer, _camera, _controls;
     var _objLoad, _water, _directionalLight;
 
-    var _MapWidth = 16, _MapHeight = 16;
+    var _MapWidth = 0, _MapHeight = 0;
     
     //INITIALIZE
     init();
@@ -210,9 +210,10 @@ var C3DWorld = function (WaterScene) {
         return directionalLight;
     }
 
-    function Create_cube(h, w, l, color, x, y, z) {
+    function Create_cube(h, w, l, color, x, y, z, name) {
         var cube = new THREE.Mesh(new THREE.BoxGeometry(h, w, l), new THREE.MeshLambertMaterial({ color: color }));
         cube.id = Number('10' + z.toString() + '10' + x.toString());
+        cube.name = name;
         cube.position.set(x, y, z);
         cube.castShadow = true;
         cube.receiveShadow = true;
@@ -337,7 +338,7 @@ var C3DWorld = function (WaterScene) {
 
         //-------------------------------------------------------
     
-    this.Create_CaveofMapfile = function (file) {
+    this.Create_CaveofMapfile = function (file, callback) {
         var reader = new FileReader();
         reader.onload = function (progressEvent) {
             //separa el contenido del fichero por \n
@@ -355,11 +356,11 @@ var C3DWorld = function (WaterScene) {
             //Creamos los bloques ocupando todo el mapa
             for (var x = 0; x < width ; x++)
                 for (var z = 0; z < height; z++)
-                    Create_cube(1, 1, 1, COLOR_BLOCK0, x, 0, z);
+                    Create_cube(1, 1, 1, COLOR_BLOCK0, x, 0, z, 'obstacle');
 
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cube(width, .25, height, COLOR_MAPPLATAFORM, (height / 2) - 1, -0.5, (width / 2) - 1);
+            Create_cube(width, .25, height, COLOR_MAPPLATAFORM, (height / 2) - 1, -0.5, (width / 2) - 1, 'base');
 
             //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
             for (var i = 1; i < content.length; i++) {
@@ -373,6 +374,7 @@ var C3DWorld = function (WaterScene) {
                 _scene.remove(selectedObject);
             }
 
+            callback();
         };
 
         reader.readAsText(file);
