@@ -11,6 +11,7 @@ var CAgent = function (Params, speed, z, x) {
     //ATTRIBUTES
     const _MAXSWING = 0.03;
     const _SWINGSPEED = 0.001;
+    const _SIZE = 0.3;
 
     var _Wheatley;  //objeto visual en el mundo 3d  
 
@@ -116,8 +117,8 @@ var CAgent = function (Params, speed, z, x) {
 
     function Borders_Delimeters() {
         var possible = true;
-        switch (_direction) { //movimiento Wheatley en el mapa
-            case 0: //de frente
+        switch (_direction) { //según el movimiento Wheatley en el mapa
+            case 0: //adelante
                 if (_Wheatley.position.z >= Params.height - 1)
                     possible = false;
                 break;
@@ -139,55 +140,136 @@ var CAgent = function (Params, speed, z, x) {
     }
 
     function Collisions() {
-        return true;
-
-        const TOLERANCE = 1.5;
-        const TOLERANCE_EUC = 0.08;
-
-        function CheckCoord(direction, _Wheatleypos, Childpos, Childscale) {
-            var diff = _Wheatleypos - Childpos;
-            if (((direction * diff) >= 0 ) && (Math.abs(diff) <= TOLERANCE)) {
-                var childcoord = Childpos; // + (Childscale / 2);
-                var Euclidean_Distance = Math.sqrt(Math.pow(childcoord - _Wheatleypos, 2))
-                if (Euclidean_Distance <= TOLERANCE_EUC) {
-                    _movement = 'stop';
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-
+        //TODO ESTO HAY QUE OPTIMIZARLO, y MUCHO!
         for (var i = 0, l = Params.scene.children.length; i < l; i++) {            
-            var child = Params.scene.children[i];
-            if (child.name == 'obstacle') {
-                //para aligerar computación, descartamos primero los objetos que estan más lejanos
+            var object = Params.scene.children[i];
+            if (object.name == 'obstacle') {
+                switch (_direction) { //según el movimiento Wheatley en el mapa
+                    case 0: //adelante
 
-                switch (_direction) { 
-                    case 0: //de frente
-                        //comprueba Z
-                        if (CheckCoord(1, _Wheatley.position.z, child.position.z, child.scale.z) == false)
-                            return false
+                        //mismo eje de movimiento y sentido correcto
+                        if ((_Wheatley.position.x.toFixed(0) == object.position.x.toFixed(0)) && (_Wheatley.position.z < object.position.z)) {
+
+                            var distance = object.position.z - _Wheatley.position.z; 
+                            if (distance < 1) { //desechamos los lejanos
+                                var distancetoObstacle = (object.position.z - (object.scale.z / 2)) - (_Wheatley.position.z + (_SIZE / 2));
+                                if (distancetoObstacle <= 0) { //comprobamos la distancia del cercano
+                                    _movement = 'stop';
+                                    return false;
+                                }
+                            }
+                        } else if (_Wheatley.position.z < object.position.z) { //sentido correcto
+                            var objwallmin = (object.position.x - (object.scale.x / 2)) - (_SIZE / 2);
+                            var objwallMax = (object.position.x + (object.scale.x / 2)) + (_SIZE / 2);
+
+                            if ((_Wheatley.position.x >= objwallmin) && ((_Wheatley.position.x) <= objwallMax)) { //objwall <= wheawall
+                                var distance = object.position.z - _Wheatley.position.z;
+                                if (distance < 1) { //desechamos los lejanos
+                                    var distancetoObstacle = (object.position.z - (object.scale.z / 2)) - (_Wheatley.position.z + (_SIZE / 2));
+                                    if (distancetoObstacle == 0) { //comprobamos la distancia del cercano
+                                        _movement = 'stop';
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
                         break;
+
                     case 180: //atrás
-                        //comprueba Z
-                        if (CheckCoord(-1, _Wheatley.position.z, child.position.z, child.scale.z))
-                            return false
+
+                        //mismo eje de movimiento y sentido correcto
+                        if ((_Wheatley.position.x.toFixed(0) == object.position.x.toFixed(0)) && (_Wheatley.position.z > object.position.z)) {
+
+                            var distance = _Wheatley.position.z - object.position.z;
+                            if (distance < 1) { //desechamos los lejanos
+                                var distancetoObstacle = (_Wheatley.position.z - (_SIZE / 2)) - (object.position.z + (object.scale.z / 2));
+                                if (distancetoObstacle <= 0) { //comprobamos la distancia del cercano
+                                    _movement = 'stop';
+                                    return false;
+                                }
+                            }
+                        } else if (_Wheatley.position.z > object.position.z) { //sentido correcto
+                            var objwallmin = (object.position.x - (object.scale.x / 2)) - (_SIZE / 2);
+                            var objwallMax = (object.position.x + (object.scale.x / 2)) + (_SIZE / 2);
+
+                            if ((_Wheatley.position.x >= objwallmin) && ((_Wheatley.position.x) <= objwallMax)) { //objwall <= wheawall
+                                var distance = object.position.z - _Wheatley.position.z;
+                                if (distance < 1) { //desechamos los lejanos
+                                    var distancetoObstacle = (object.position.z - (object.scale.z / 2)) - (_Wheatley.position.z + (_SIZE / 2));
+                                    if (distancetoObstacle == 0) { //comprobamos la distancia del cercano
+                                        _movement = 'stop';
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
                         break;
+
                     case 90: //izquierda
-                        //Comprueba X
-                        if (CheckCoord(1, _Wheatley.position.x, child.position.x, child.scale.x))
-                            return false
+
+                        //mismo eje de movimiento y sentido correcto
+                        if ((_Wheatley.position.z.toFixed(0) == object.position.z.toFixed(0)) && (_Wheatley.position.x < object.position.x)) {
+
+                            var distance = object.position.x - _Wheatley.position.x;
+                            if (distance < 1) { //desechamos los lejanos
+                                var distancetoObstacle = (object.position.x - (object.scale.x / 2)) - (_Wheatley.position.x + (_SIZE / 2));
+                                if (distancetoObstacle <= 0) { //comprobamos la distancia del cercano
+                                    _movement = 'stop';
+                                    return false;
+                                }
+                            }
+                        } else if (_Wheatley.position.x < object.position.x) { //sentido correcto
+                            var objwallmin = (object.position.z - (object.scale.z / 2)) - (_SIZE / 2);
+                            var objwallMax = (object.position.z + (object.scale.z / 2)) + (_SIZE / 2);
+
+                            if ((_Wheatley.position.z >= objwallmin) && ((_Wheatley.position.z) <= objwallMax)) { //objwall <= wheawall
+                                var distance = object.position.x - _Wheatley.position.x;
+                                if (distance < 1) { //desechamos los lejanos
+                                    var distancetoObstacle = (object.position.x - (object.scale.x / 2)) - (_Wheatley.position.x + (_SIZE / 2));
+                                    if (distancetoObstacle == 0) { //comprobamos la distancia del cercano
+                                        _movement = 'stop';
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
                     case 270: //derecha
-                        //Comprueba X
-                        if (CheckCoord(-1, _Wheatley.position.x, child.position.x, child.scale.x))
-                            return false
+
+                        //mismo eje de movimiento y sentido correcto
+                        if ((_Wheatley.position.z.toFixed(0) == object.position.z.toFixed(0)) && (_Wheatley.position.x > object.position.x)) {
+
+                            var distance = _Wheatley.position.x - object.position.x;
+                            if (distance < 1) { //desechamos los lejanos
+                                var distancetoObstacle = (_Wheatley.position.x - (_SIZE / 2)) - (object.position.x + (object.scale.x / 2));
+                                if (distancetoObstacle <= 0) { //comprobamos la distancia del cercano
+                                    _movement = 'stop';
+                                    return false;
+                                }
+                            }
+                        } else if (_Wheatley.position.x > object.position.x) { //sentido correcto
+                            var objwallmin = (object.position.z - (object.scale.z / 2)) - (_SIZE / 2);
+                            var objwallMax = (object.position.z + (object.scale.z / 2)) + (_SIZE / 2);
+
+                            if ((_Wheatley.position.z >= objwallmin) && ((_Wheatley.position.z) <= objwallMax)) { //objwall <= wheawall
+                                var distance = _Wheatley.position.x - object.position.x;
+                                if (distance < 1) { //desechamos los lejanos
+                                    var distancetoObstacle = (_Wheatley.position.x - (_SIZE / 2)) - (object.position.x + (object.scale.x / 2));
+                                    if (distancetoObstacle == 0) { //comprobamos la distancia del cercano
+                                        _movement = 'stop';
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
                         break;
                 }
             }
         }
-
         return true;
     }
 
