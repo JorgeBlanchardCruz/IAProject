@@ -14,7 +14,11 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     const _SIZE = 0.3;
 
     var _Wheatley;  //objeto visual en el mundo 3d  
-
+    ///Para la trayectoria
+    var bloque = 0;         //Variable para mover de bloque en bloque
+    var trayectoria = ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']; //Trayectoria a seguir,esta resuelve el camino del mapa de prueba
+    var iniciar = false;
+    var indx = 0;   //Indice para recorrer la trayectoria
     //SWING
     var _countswing = 0;
     var _dirswing = false;
@@ -70,7 +74,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         catch (err) { console.log(err); }
     }
 
-    function Move(movement) {
+   /* function Move(movement) {
         _movement = movement;
 
         var rotate = 0;
@@ -114,7 +118,78 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         //camera_position.innerHTML = 'obj position: ' + _Wheatley.position.x.toFixed(2).toString() + ';' + _Wheatley.position.y.toFixed(2).toString() + ';' + _Wheatley.position.z.toFixed(2).toString();
         camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Wheatley.position.z.toFixed(2).toString() + ' ; ' + _Wheatley.position.x.toFixed(2).toString();
     }
+    */
+    function Move(movement) {
+        if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
+            iniciar = true;
+            _movement = 'stop';
+        }
 
+
+        if (iniciar) {
+            _movement = trayectoria[indx];
+            var rotate = 0;
+            switch (_movement) {
+                case 'a':
+                    rotate = Math.degrees(Math.PI / 2);
+                    break;
+                case 'd':
+                    rotate = Math.degrees(Math.PI / 2) * (-1);
+                    break;
+                default:
+                    break;
+            }
+
+            Calculate_direction(rotate);
+
+        }
+
+        function Calculate_direction(rotate) {
+            _direction += rotate;
+            _direction = (_direction == -90 ? 270 : _direction);
+            _direction = (_direction >= 360 ? 0 : _direction);
+        }
+    }
+    function AccionAnimation() {
+        switch (_movement) {
+            case 'w':
+                // _Wheatley.translateZ((Borders_Delimeters() ? (Collisions() ? _speed : 0) : 0));
+                MoverUnBloque();    //Mueve un bloque completo 
+                break;
+            case 'a':
+            case 'd':
+                _Wheatley.rotation.y = Math.radians(_direction);
+                _movement = 'stop';
+                add_indx(); //Suma uno al indicie para seguir con el siguiente movimiento
+                break;
+            default: //stop
+                _Wheatley.translateZ(0);
+                break;
+        }
+
+        Swing();
+
+        //camera_position.innerHTML = 'obj position: ' + _Wheatley.position.x.toFixed(2).toString() + ';' + _Wheatley.position.y.toFixed(2).toString() + ';' + _Wheatley.position.z.toFixed(2).toString();
+        camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Wheatley.position.z.toFixed(2).toString() + ' ; ' + _Wheatley.position.x.toFixed(2).toString();
+    }
+    function MoverUnBloque() {
+        if (bloque < 1) {
+            _Wheatley.translateZ((Borders_Delimeters() ? (Collisions() ? _speed : 0) : 0));
+            bloque += _speed;
+        }
+        else {
+            bloque = 0;
+            _movement = 'stop';
+            _Wheatley.translateZ(0);
+            add_indx();
+        }
+    }
+    function add_indx() {   //Recorre el vector de trayectoria
+        if (indx < trayectoria.length - 1) {
+            indx++;
+            Move('i');
+        }
+    }
     function Borders_Delimeters() {
         var possible = true;
         switch (_direction) { //según el movimiento Wheatley en el mapa
