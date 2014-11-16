@@ -4,30 +4,47 @@
  * 
  */
 
-var C3DWorld = function (WaterScene) {
+var C3DWorld = function (Antialias, WaterScene) {
     "use strict";
 
+    //STRUCTURES
+    function Block(id, type, pathtexture, color, height) {
+        this._id = id;
+        this._type = type;
+        this._pathtexture = pathtexture; //si utilizamos texturas el rendimiento es mucho menor
+        this._color = color;
+        this._height = height;
+    }
+
     //ATTRIBUTES
-    const SEP_ATTRIBUTE = ',';
-    const COLOR_BACKGROUNDSCENE = '#E5E8D3';
-    const COLOR_MAPPLATAFORM = '#998462';
-    const COLOR_BLOCK0 = 'white';
+    const SEP_COORD = ',';
+    const SET_TYPE = ';';
+    const COLOR_BACKGROUNDSCENE = '#7FBCC9';
 
-    var _container;
-    var _scene, _renderer, _camera, _controls;
-    var _objLoad, _water, _directionalLight;
+        //Objetos para la escena
+        var _container;
+        var _scene, _renderer, _camera, _controls;
+        var _objLoad, _water, _directionalLight;
+        //----------------------
 
-    var _MapWidth = 0, _MapHeight = 0;
+        //atributos del mapa
+        var MAPMatrix; //estoy hay que mejorarlo, lo he dejado así de forma provisional
+        var _MapWidth = 0, _MapHeight = 0;
+        //---------------------
+
+    var _TypeBlock;
+    var _Blocks;
     
     //INITIALIZE
     init();
+    init_Blocks();
 
     //PROCEDURES
     function init() {
         _container = document.createElement('div');
         document.body.appendChild(_container);
 
-        _renderer = new THREE.WebGLRenderer({ antialias: true }); //inicializar Three.js
+        _renderer = new THREE.WebGLRenderer({ antialias: Antialias }); //inicializar Three.js
         _renderer.setSize(window.innerWidth, window.innerHeight);
         _renderer.shadowMapType = THREE.PCFSoftShadowMap;
         _renderer.setClearColor(COLOR_BACKGROUNDSCENE, 1);
@@ -53,6 +70,19 @@ var C3DWorld = function (WaterScene) {
         if (WaterScene) { Create_WaterScene(_directionalLight); }
 
         animate();
+    }
+
+    function init_Blocks() {
+        _TypeBlock = ['obstacle', 'removable', 'floor'];
+
+        //Poned colores y texturas a los blockes asi como el tipo de bloque.
+        //(Solo 'obstacle' funcionará para las colisiones)
+        _Blocks = [
+            new Block('pared', _TypeBlock[0], '', '#6D7516', 1),
+            new Block('suelo', _TypeBlock[2], '', '#5C4710', 0.25),
+            new Block('escombros', _TypeBlock[1], '', '#DFE36B', 1),
+            new Block('pozo', _TypeBlock[0], '', '#6D8EC7', 0.1)
+        ];
     }
 
     function animate() {
@@ -211,13 +241,38 @@ var C3DWorld = function (WaterScene) {
     }
 
     function Create_cube(h, w, l, color, x, y, z, name) {
-        var cube = new THREE.Mesh(new THREE.BoxGeometry(h, w, l), new THREE.MeshLambertMaterial({ color: color }));
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(w, h, l), new THREE.MeshLambertMaterial({ color: color }));
         cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.name = name;
         cube.position.set(x, y, z);
         cube.castShadow = true;
         cube.receiveShadow = true;
         //cube.rotateOnAxis(new THREE.Vector3(0, 0, 1).normalize(), 0.075);
+        _scene.add(cube);
+
+        return cube;
+    }
+
+    function Create_cubeBlock(block, w, l, x, y, z) {
+        if (block._pathtexture != '')
+            Create_cubeTexture(block, w, l, x, y, z);
+        else
+            Create_cube(block._height, w, l, block._color, x, y, z, block._type);
+    }
+
+    function Create_cubeTexture(block, w, l, x, y, z) {
+        var material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture(block._pathtexture)
+        })
+        //new THREE.MeshLambertMaterial({ map: block.texture, color: 0xffffff, ambient: 0x777777, shading: THREE.SmoothShading })
+
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(w, block._height, l), material);
+        cube.id = Number('10' + z.toString() + '10' + x.toString());
+        cube.name = block._type;
+        cube.position.set(x, y, z);
+        cube.castShadow = true;
+        cube.receiveShadow = true;
+
         _scene.add(cube);
 
         return cube;
@@ -328,53 +383,102 @@ var C3DWorld = function (WaterScene) {
         return undefined;
     }
 
+    function Read_FileMap_Way(content) {
+
+        //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
+        MAPMatrix = new Array();
+        for (var x = 0; x < _MapWidth ; x++)
+            for (var z = 0; z < _MapHeight; z++) {
+                Create_cubeBlock(_Blocks[0], 1, 1, x, 0, z);
+                MAPMatrix.push([z, x, _TypeBlock[0]]);
+            }
+
+        //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
+        for (var i = 3; i < content.length; i++) {
+            var line = content[i];
+            var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
+            var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
+            var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
+
+            var id = Number('10' + Number(z) + '10' + Number(x));
+            var selectedObject = _scene.getObjectById(id);
+            _scene.remove(selectedObject);
+            if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+
+            //modifica el elemento del array de mapa correspondiente
+            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+        }
+    }
+
+    function Read_FileMap_Blocks(content) {
+        //Creamos  la matriz del mapa
+        MAPMatrix = new Array();
+        for (var x = 0; x < _MapWidth ; x++)
+            for (var z = 0; z < _MapHeight; z++)
+                MAPMatrix.push([z, x, -1]);
+
+        //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
+        for (var i = 3; i < content.length; i++) {
+            var line = content[i];
+            var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
+            var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
+            var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
+
+            Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+
+            //modifica el elemento del array de mapa correspondiente
+            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+        }
+    }
+
 
     //METHODS    
         //-------------------------------------------------------
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight }; }
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock }; }
 
         //setters
 
         //-------------------------------------------------------
-    
+ 
     this.Create_CaveofMapfile = function (file, callback) {
+        /*
+
+            El formato del fichero es el siguiente:
+            1ª línea: especifica 'way' (se eliminarán los bloques que crean los caminos) 
+                        o 'blocks' (donde se añadirán los boques introducidos)
+            2ª línea: tamaño del mapa (ejemplo: 15x15)
+            3ª línea: se definirá la posición de los Agentes o robots (z,x;ángulo)
+            4ª línea en adelante: posición de los bloques o caminos con el formato z,x;tipobloque.
+
+        */
         var reader = new FileReader();
         reader.onload = function (progressEvent) {
             //separa el contenido del fichero por \n
             var content = this.result.split('\n');
 
+            //recogemos el tipo de procedimiento que se va a realizar
+            var procetype = content[0];
+
             //recogemos las dimensiones del mapa
-            var height = content[0].substring(0, content[0].lastIndexOf('x'));
-            var width = content[0].substring(content[0].lastIndexOf('x') + 1, content[0].length);
+            var height = content[1].substring(0, content[1].lastIndexOf('x'));
+            var width = content[1].substring(content[1].lastIndexOf('x') + 1, content[1].length);
     
             width = Number(width);
             height = Number(height);
             _MapWidth = width;
             _MapHeight = height;
 
-            //Creamos los bloques ocupando todo el mapa
-            for (var x = 0; x < width ; x++)
-                for (var z = 0; z < height; z++)
-                    Create_cube(1, 1, 1, COLOR_BLOCK0, x, 0, z, 'obstacle');
-
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cube(width, .25, height, COLOR_MAPPLATAFORM, (height / 2) - 1, -0.5, (width / 2) - 1, 'base');
+            Create_cubeBlock(_Blocks[1], width, height, (height / 2) - 1, -0.5, (width / 2) - 1);
+         
+            if (procetype == 'way')
+                Read_FileMap_Way(content);
+            else
+                Read_FileMap_Blocks(content);
 
-            //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
-            for (var i = 1; i < content.length; i++) {
-
-                var line = content[i];
-                var z = line.substring(0, line.lastIndexOf(SEP_ATTRIBUTE));
-                var x = line.substring(line.lastIndexOf(SEP_ATTRIBUTE) + 1, line.length);
-                
-                var id = Number('10' + Number(z) + '10' + Number(x));
-                var selectedObject = _scene.getObjectById(id);
-                _scene.remove(selectedObject);
-            }
-
-            callback();
+            callback(); //ejecuta las funciones posteriores a cuando termina la carga del mapa
         };
 
         reader.readAsText(file);
