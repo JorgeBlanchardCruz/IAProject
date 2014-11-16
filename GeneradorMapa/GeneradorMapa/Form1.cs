@@ -15,9 +15,10 @@ namespace GeneradorMapa
       private string entrada;
       private Cuadricula tab_;
       private int selected_;
-
+      private bool creado_;
         public Form1()
         {
+            creado_ = false;
             entrada = null;
             selected_ = -1;
            // _C = new System.Windows.Forms.Label(); ;
@@ -31,8 +32,17 @@ namespace GeneradorMapa
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 f = new Form2(this);
-            f.Show();
+            if (!creado_)
+            {
+                Form2 f = new Form2(this);
+                f.Show();
+                
+            }
+        }
+        private void generarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (creado_)
+            generarFichero();
         }
         public void CrearTabla()
         {
@@ -63,7 +73,70 @@ namespace GeneradorMapa
                     }
                 }
                // this.ResumeLayout(false);
+                creado_ = true;
             }    
+        }
+        private void generarFichero()
+        {
+            string[] cad = entrada.Split('x');
+            bool ok = true;
+            List<string> texto = new List<string>();
+            bool inicio = false;
+            bool final = false;
+
+            texto.Add("bloks");
+            texto.Add(cad[0] + "x" + cad[1]);
+
+            for (int i = 0; i < tab_.get_rows(); i++)
+            {
+                for (int j = 0; j < tab_.get_columns(); j++)
+                {
+                    if (tab_.get_Celda(i, j).get_index() == 1)
+                    {
+                        if (!inicio)
+                        {
+                            inicio = true;
+                            texto.Add(Convert.ToString(i) + "x" + Convert.ToString(j));
+                        }
+                        else
+                            ok = false;
+
+                    }
+                    else if (tab_.get_Celda(i, j).get_index() == 2)
+                    {
+                        if (!final)
+                            final = true;
+                        else
+                            ok = false;
+                    }
+                }
+            }
+            for (int i = 0; i < tab_.get_rows(); i++)
+            {
+                for (int j = 0; j < tab_.get_columns(); j++)
+                {
+                    if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 1)
+                    {
+                        texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+                    }
+                }
+
+            }
+
+            if (ok)
+            {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
+
+                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\Users\Sabato\mapa.map"))
+                {
+                    texto.ForEach(delegate(string ln)
+                    {
+                        mapa.WriteLine(ln);
+                    });
+
+
+                }
+            }
+                MessageBox.Show(texto[2]);
         }
         public string getent() { return entrada; }
         public void setent(string s) {  entrada = s; }
