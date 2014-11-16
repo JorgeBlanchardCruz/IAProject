@@ -163,29 +163,29 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                 break;
             case 'a':
             case 'd':
-                _Wheatley.rotation.y = Math.radians(_direction);
+                _Visualobj.rotation.y = Math.radians(_direction);
                 _movement = 'stop';
                 add_indx(); //Suma uno al indicie para seguir con el siguiente movimiento
                 break;
             default: //stop
-                _Wheatley.translateZ(0);
+                _Visualobj.translateZ(0);
                 break;
         }
 
         Swing();
 
         //camera_position.innerHTML = 'obj position: ' + _Wheatley.position.x.toFixed(2).toString() + ';' + _Wheatley.position.y.toFixed(2).toString() + ';' + _Wheatley.position.z.toFixed(2).toString();
-        camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Wheatley.position.z.toFixed(2).toString() + ' ; ' + _Wheatley.position.x.toFixed(2).toString();
+        camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
     }
     function MoverUnBloque() {
         if (bloque < 1) {
-            _Wheatley.translateZ((Borders_Delimeters() ? (Collisions() ? _speed : 0) : 0));
+            _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
             bloque += _speed;
         }
         else {
             bloque = 0;
             _movement = 'stop';
-            _Wheatley.translateZ(0);
+            _Visualobj.translateZ(0);
             add_indx();
         }
     }

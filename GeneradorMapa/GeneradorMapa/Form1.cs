@@ -96,7 +96,7 @@ namespace GeneradorMapa
                         if (!inicio)
                         {
                             inicio = true;
-                            texto.Add(Convert.ToString(i) + "x" + Convert.ToString(j));
+                            texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";0");
                         }
                         else
                             ok = false;
