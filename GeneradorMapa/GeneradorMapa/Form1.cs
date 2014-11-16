@@ -21,7 +21,7 @@ namespace GeneradorMapa
             entrada = null;
             selected_ = -1;
            // _C = new System.Windows.Forms.Label(); ;
-            tab_ = new Cuadricula(0, 0, this);
+            tab_ = new Cuadricula(0, 0, 0,this);
             InitializeComponent();
             //this.Opacity = .75;
             this.WindowState = FormWindowState.Maximized;
@@ -42,17 +42,18 @@ namespace GeneradorMapa
             {
                 Convert.ToInt32(cad[0]);
                 Convert.ToInt32(cad[1]);
+                Convert.ToInt32(cad[2]);
             }
             catch (FormatException)
             {
                 ok = false;
-                MessageBox.Show("Debe ser formato FILASxCOLUMNAS");
+                MessageBox.Show("Debe ser formato FILASxCOLUMNASxOBSTACULOS");
             }
        
             if (ok)
             {
                 //this.SuspendLayout();
-                tab_ = new Cuadricula(Convert.ToInt32(cad[0]), Convert.ToInt32(cad[1]), this);
+                tab_ = new Cuadricula(Convert.ToInt32(cad[0]), Convert.ToInt32(cad[1]), Convert.ToInt32(cad[2]),this);
                 for (int i = 0; i < tab_.get_rows(); i++)
                 {
                     for (int j = 0; j < tab_.get_columns(); j++)
