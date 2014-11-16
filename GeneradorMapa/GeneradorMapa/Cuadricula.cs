@@ -18,11 +18,21 @@ namespace GeneradorMapa
             rows_ = a;
             columns_ = b;
             Celdas_ = new Celda[a,b];
-            
+
 
             for (int i = 0; i < a; i++)
+            {
                 for (int j = 0; j < b; j++)
-                    Celdas_[i,j] = new Celda(i, j, 0, parent_);      
+                {
+                    if (i == 0 || i == a - 1)
+                        Celdas_[i, j] = new Celda(i, j, 3, parent_);
+                    else if (j == 0 || j == b - 1)
+                        Celdas_[i, j] = new Celda(i, j, 3, parent_);
+                    else
+                        Celdas_[i, j] = new Celda(i, j, 0, parent_);
+                }
+
+            }
         }
 
        public Celda get_Celda(int i, int j) { return Celdas_[i,j]; }

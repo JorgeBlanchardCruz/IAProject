@@ -118,6 +118,12 @@
   <ItemGroup>
     <Content Include="Resources\azulM.png" />
     <Content Include="Resources\blancoM.png" />
+    <None Include="Resources\wood.jpg" />
+    <None Include="Resources\waternormals.jpg" />
+    <None Include="Resources\grass.png" />
+    <None Include="Resources\metal.jpg" />
+    <None Include="Resources\plywood.jpg" />
+    <None Include="Resources\rocks.jpg" />
     <Content Include="Resources\rojoM.png" />
     <Content Include="Resources\verdeM.png" />
     <None Include="Resources\waterM.png" />

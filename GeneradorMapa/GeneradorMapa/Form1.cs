@@ -51,6 +51,7 @@ namespace GeneradorMapa
        
             if (ok)
             {
+                //this.SuspendLayout();
                 tab_ = new Cuadricula(Convert.ToInt32(cad[0]), Convert.ToInt32(cad[1]), this);
                 for (int i = 0; i < tab_.get_rows(); i++)
                 {
@@ -60,7 +61,7 @@ namespace GeneradorMapa
                         this.tab_.get_Celda(i, j).Click += new System.EventHandler(this.tab_.get_Celda(i, j).Celda_Click);
                     }
                 }
-
+               // this.ResumeLayout(false);
             }    
         }
         public string getent() { return entrada; }
@@ -71,15 +72,7 @@ namespace GeneradorMapa
           
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-        
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-        //    this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rojo;
-        }
+     
         private void pic1_Click(object sender, EventArgs e)
         {
             this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blancoM;

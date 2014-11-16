@@ -23,7 +23,8 @@ namespace GeneradorMapa
             //this.Image = global::GeneradorMapa.Properties.Resources.blanco;
             ActualizarImagen();
         }
-
+       public int get_index() { return indx_; }
+       public void set_index(int i) { indx_ = i; ActualizarImagen(); }
        public void Celda_Click(object sender, EventArgs e){
            indx_ = parent_.get_selected();
            //this.Image = global::GeneradorMapa.Properties.Resources.rojo;
