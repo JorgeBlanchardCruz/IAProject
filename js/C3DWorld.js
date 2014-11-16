@@ -28,7 +28,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         //----------------------
 
         //atributos del mapa
-        var MAPMatrix;
+        var MAPMatrix; //estoy hay que mejorarlo, lo he dejado así de forma provisional
         var _MapWidth = 0, _MapHeight = 0;
         //---------------------
 
@@ -383,16 +383,6 @@ var C3DWorld = function (Antialias, WaterScene) {
         return undefined;
     }
 
-
-    //METHODS    
-        //-------------------------------------------------------
-        //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock }; }
-
-        //setters
-
-        //-------------------------------------------------------
-    
     function Read_FileMap_Way(content) {
 
         //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
@@ -406,15 +396,15 @@ var C3DWorld = function (Antialias, WaterScene) {
         //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
         for (var i = 3; i < content.length; i++) {
             var line = content[i];
-            var z = line.substring(0, line.lastIndexOf(SEP_COORD));
-            var x = line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE));
+            var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
+            var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
             var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
 
             var id = Number('10' + Number(z) + '10' + Number(x));
             var selectedObject = _scene.getObjectById(id);
             _scene.remove(selectedObject);
             if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
-                
+
             //modifica el elemento del array de mapa correspondiente
             MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
         }
@@ -430,8 +420,8 @@ var C3DWorld = function (Antialias, WaterScene) {
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
         for (var i = 3; i < content.length; i++) {
             var line = content[i];
-            var z = line.substring(0, line.lastIndexOf(SEP_COORD));
-            var x = line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE));
+            var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
+            var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
             var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
 
             Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
@@ -441,8 +431,17 @@ var C3DWorld = function (Antialias, WaterScene) {
         }
     }
 
-    this.Create_CaveofMapfile = function (file, callback) {
 
+    //METHODS    
+        //-------------------------------------------------------
+        //getters
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock }; }
+
+        //setters
+
+        //-------------------------------------------------------
+ 
+    this.Create_CaveofMapfile = function (file, callback) {
         /*
 
             El formato del fichero es el siguiente:
@@ -453,7 +452,6 @@ var C3DWorld = function (Antialias, WaterScene) {
             4ª línea en adelante: posición de los bloques o caminos con el formato z,x;tipobloque.
 
         */
-
         var reader = new FileReader();
         reader.onload = function (progressEvent) {
             //separa el contenido del fichero por \n
@@ -477,7 +475,7 @@ var C3DWorld = function (Antialias, WaterScene) {
          
             if (procetype == 'way')
                 Read_FileMap_Way(content);
-            if (procetype == 'blocks')
+            else
                 Read_FileMap_Blocks(content);
 
             callback(); //ejecuta las funciones posteriores a cuando termina la carga del mapa
