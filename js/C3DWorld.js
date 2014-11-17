@@ -420,6 +420,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
         for (var i = 3; i < content.length; i++) {
             var line = content[i];
+            //CUIDADO!!! SE ESTAN INVIRTIENDO LAS VARIABLES !!!!!!!
             var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
             var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
             var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));

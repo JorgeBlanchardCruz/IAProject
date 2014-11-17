@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneradorMapa
 {
-    class Celda : System.Windows.Forms.PictureBox
+    public class Celda : System.Windows.Forms.PictureBox
     {
        // private System.Windows.Forms.PictureBox Img_;
         private int indx_;

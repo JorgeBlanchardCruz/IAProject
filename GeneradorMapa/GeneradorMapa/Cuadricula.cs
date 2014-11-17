@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneradorMapa
 {
-    class Cuadricula
+   public class Cuadricula
     {
         private Celda[,] Celdas_;
         private int rows_;
@@ -15,6 +15,7 @@ namespace GeneradorMapa
        public  Cuadricula(int a, int b, int c, Form1 p)
         {
             parent_ = p;
+         //   parent_.prueba = "Cambio";
             rows_ = a;
             columns_ = b;
             Celdas_ = new Celda[a,b];
@@ -51,7 +52,13 @@ namespace GeneradorMapa
             }
         }
 
-       public Celda get_Celda(int i, int j) { return Celdas_[i,j]; }
+       public Celda get_Celda(int i, int j) {
+         //  parent_.prueba = "CaMBIADO";
+           if (i >= 0 && i < rows_ && j >= 0 && j < columns_)
+               return Celdas_[i, j];
+           else
+               throw new IndexOutOfRangeException();
+       }
        public int get_rows() { return rows_; }
        public int get_columns() { return columns_; }
     }

@@ -16,8 +16,10 @@ namespace GeneradorMapa
       private Cuadricula tab_;
       private int selected_;
       private bool creado_;
+    //  public string prueba;
         public Form1()
         {
+        //    prueba = "hola";
             creado_ = false;
             entrada = null;
             selected_ = -1;
@@ -26,8 +28,7 @@ namespace GeneradorMapa
             InitializeComponent();
             //this.Opacity = .75;
             this.WindowState = FormWindowState.Maximized;
-            Paleta a = new Paleta();
-            a.Show();
+           
         }
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -74,7 +75,8 @@ namespace GeneradorMapa
                 }
                // this.ResumeLayout(false);
                 creado_ = true;
-            }    
+            }
+           // MessageBox.Show(prueba);
         }
         private void generarFichero()
         {
@@ -136,11 +138,12 @@ namespace GeneradorMapa
 
                 }
             }
-                MessageBox.Show(texto[2]);
+               // MessageBox.Show(texto[2]);
         }
         public string getent() { return entrada; }
         public void setent(string s) {  entrada = s; }
         public int get_selected() { return selected_; }
+        public Cuadricula get_tab() { return tab_; }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
           
