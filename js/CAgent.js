@@ -8,6 +8,27 @@
 var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     "use strict";
 
+    //STRUCTURES
+    function path(indx, block, begin, path) {
+        this._indx = indx;
+        this._block = block;
+        this._begin = begin;
+        this._path = path;
+
+         this.add_indx = function (Callback) {  //Recorre el vector de trayectoria
+             if (this._indx < this._path.length - 1) {
+                 this._indx++;
+
+                Callback('i');
+            }
+        }
+
+         this.get_CurrentMove = function () {
+             return this._path[this._indx];
+        }
+    }
+
+
     //ATTRIBUTES
     const _MAXSWING = 0.03;
     const _SWINGSPEED = 0.001;
@@ -24,12 +45,16 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     var _movement = 'stop';
     
     var _direction = 0;
+
+    //path
+    var _Path;
     
     //temp variable
     var camera_position;
 
     //INITIALIZE
     init();
+    init_TestPath();
 
     //PROCEDURES
     // Converts from radians to degrees.
@@ -47,7 +72,12 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
         animate();
     }
-    
+
+    function init_TestPath() {
+                                        //esto es una ruta de prueba
+        _Path = new path(0, 0, false, ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']);
+    }
+
     function Load_objmtl(fileobj, filemtl, x, y, z, scalex, scaley, scalez) {
         try {
             THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
@@ -70,8 +100,41 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         catch (err) { console.log(err); }
     }
 
+    //function Move(movement) {
+    //    _movement = movement;
+
+    //    var rotate = 0;
+    //    switch (_movement) {
+    //        case 'a':
+    //            rotate = Math.degrees(Math.PI / 2);
+    //            break;
+    //        case 'd':
+    //            rotate = Math.degrees(Math.PI / 2) * (-1);
+    //            break;
+    //        default: 
+    //            break;
+    //    }
+
+    //    Calculate_direction(rotate);
+
+    //    function Calculate_direction(rotate) {
+    //        _direction += rotate;
+    //        _direction = (_direction == -90 ? 270 : _direction);
+    //        _direction = (_direction >= 360 ? 0 : _direction);       
+    //    }
+    //}
+
+
     function Move(movement) {
         _movement = movement;
+
+        if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
+            _Path._begin = true;
+            _movement = 'stop';
+        }
+    
+        if (_Path._begin)
+            _movement = _Path.get_CurrentMove();
 
         var rotate = 0;
         switch (_movement) {
@@ -81,7 +144,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
             case 'd':
                 rotate = Math.degrees(Math.PI / 2) * (-1);
                 break;
-            default: 
+            default:
                 break;
         }
 
@@ -90,19 +153,20 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         function Calculate_direction(rotate) {
             _direction += rotate;
             _direction = (_direction == -90 ? 270 : _direction);
-            _direction = (_direction >= 360 ? 0 : _direction);       
+            _direction = (_direction >= 360 ? 0 : _direction);
         }
     }
 
     function AccionAnimation() {
-        switch (_movement) {
-            case 'w':      
-                _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
+        switch (_movement.toLowerCase()) {
+            case 'w':
+                BlockbyBlock();
                 break;
             case 'a':
             case 'd':
                 _Visualobj.rotation.y = Math.radians(_direction);
                 _movement = 'stop';
+                _Path.add_indx(Move);//Suma uno al indicie para seguir con el siguiente movimiento
                 break;
             default: //stop
                 _Visualobj.translateZ(0);
@@ -113,6 +177,20 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         
         //camera_position.innerHTML = 'obj position: ' + _Visualobj.position.x.toFixed(2).toString() + ';' + _Visualobj.position.y.toFixed(2).toString() + ';' + _Visualobj.position.z.toFixed(2).toString();
         camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
+    }
+
+    function BlockbyBlock() {
+        if (_Path.block < 1) {
+            _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
+            _Path.block += _speed;
+        }
+        else {      
+            _movement = 'stop';
+            _Visualobj.translateZ(0);
+
+            _Path.block = 0;
+            _Path.add_indx(Move);
+        }
     }
 
     function Borders_Delimeters() {
