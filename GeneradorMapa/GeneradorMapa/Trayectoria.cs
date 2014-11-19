@@ -21,8 +21,8 @@ namespace GeneradorMapa
             switch (dir_)
             {
                 case (int)Direcciones.NORTE: trayectoria_ += "w"; break;
-                case (int)Direcciones.SUR: trayectoria_ += "i" + "i" + "w"; break;
-                case (int)Direcciones.ESTE: trayectoria_ += "i" + "w"; break;
+                case (int)Direcciones.SUR: trayectoria_ += "a" + "a" + "w"; break;
+                case (int)Direcciones.ESTE: trayectoria_ += "a" + "w"; break;
                 case (int)Direcciones.OESTE: trayectoria_ += "d" + "w"; break;
             }
             dir_ = (int)Direcciones.NORTE;
@@ -32,10 +32,10 @@ namespace GeneradorMapa
         {
             switch (dir_)
             {
-                case (int)Direcciones.NORTE: trayectoria_ += "i" + "i" + "w"; break;
+                case (int)Direcciones.NORTE: trayectoria_ += "a" + "a" + "w"; break;
                 case (int)Direcciones.SUR: trayectoria_ += "w"; break;
                 case (int)Direcciones.ESTE: trayectoria_ += "d" + "w"; break;
-                case (int)Direcciones.OESTE: trayectoria_ += "i" + "w"; break;
+                case (int)Direcciones.OESTE: trayectoria_ += "a" + "w"; break;
             }
             dir_ = (int)Direcciones.SUR;
         }
@@ -44,9 +44,9 @@ namespace GeneradorMapa
             switch (dir_)
             {
                 case (int)Direcciones.NORTE: trayectoria_ += "d" + "w"; break;
-                case (int)Direcciones.SUR: trayectoria_ += "i" + "w"; break;
+                case (int)Direcciones.SUR: trayectoria_ += "a" + "w"; break;
                 case (int)Direcciones.ESTE: trayectoria_ += "w"; break;
-                case (int)Direcciones.OESTE: trayectoria_ += "i" + "i" + "w"; break;
+                case (int)Direcciones.OESTE: trayectoria_ += "a" + "a" + "w"; break;
             }
             dir_ = (int)Direcciones.ESTE;
         }
@@ -54,9 +54,9 @@ namespace GeneradorMapa
         {
             switch (dir_)
             {
-                case (int)Direcciones.NORTE: trayectoria_ += "i" + "w"; break;
+                case (int)Direcciones.NORTE: trayectoria_ += "a" + "w"; break;
                 case (int)Direcciones.SUR: trayectoria_ += "d" + "w"; break;
-                case (int)Direcciones.ESTE: trayectoria_ += "i" + "i" + "w"; break;
+                case (int)Direcciones.ESTE: trayectoria_ += "a" + "a" + "w"; break;
                 case (int)Direcciones.OESTE: trayectoria_ +=  "w"; break;
             }
             dir_ = (int)Direcciones.OESTE;
