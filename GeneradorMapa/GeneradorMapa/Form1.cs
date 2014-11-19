@@ -16,10 +16,12 @@ namespace GeneradorMapa
       private Cuadricula tab_;
       private int selected_;
       private bool creado_;
+      private Robot robot_;
     //  public string prueba;
         public Form1()
         {
         //    prueba = "hola";
+            robot_ = null;
             creado_ = false;
             entrada = null;
             selected_ = -1;
@@ -99,6 +101,7 @@ namespace GeneradorMapa
                         {
                             inicio = true;
                             texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";0");
+                            robot_ = new Robot(i, j, this);
                         }
                         else
                             ok = false;
@@ -125,6 +128,9 @@ namespace GeneradorMapa
 
             }
 
+            generar_recorrido();
+            texto.Add(robot_.get_trayectoria().get_trayectoria());
+
             if (ok)
             {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
 
@@ -139,6 +145,11 @@ namespace GeneradorMapa
                 }
             }
                // MessageBox.Show(texto[2]);
+        }
+
+        private void generar_recorrido()
+        {
+            robot_.get_method().run();
         }
         public string getent() { return entrada; }
         public void setent(string s) {  entrada = s; }

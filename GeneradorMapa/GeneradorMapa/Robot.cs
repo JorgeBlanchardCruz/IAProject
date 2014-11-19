@@ -21,14 +21,16 @@ namespace GeneradorMapa
        private Trayectoria trayectoria_;
        private Form1 parent_;
         //Modificar grafo por matriz, realmente es necesario????
-       Robot(int a, int b, int x, int y, Form1 p)
+      public Robot(int x, int y, Form1 p)
        {
-           metodo_ = new DFS(this);
+          
            sensores_ = new int[4];
        //    mapaConocido_ = new List<int>[a * b];
            pos_ = new Posicion(x, y);
            parent_ = p;
            trayectoria_ = new Trayectoria();
+           actualizarSensores();
+           metodo_ = new DFS(this);
        }
        
        public void actualizarSensores()
@@ -100,5 +102,6 @@ namespace GeneradorMapa
        public Trayectoria get_trayectoria() { return trayectoria_; }
        public int[] get_sensores() { return sensores_; }
        public Form1 get_parent() { return parent_; }
+       public Method get_method() { return metodo_; }
     }
 }

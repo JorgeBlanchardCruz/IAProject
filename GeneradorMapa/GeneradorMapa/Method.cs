@@ -13,6 +13,7 @@ namespace GeneradorMapa
         {
             robot_ = r;
         }
-        public virtual void run() {}
+        public virtual void run() { 
+        }
     }
 }
