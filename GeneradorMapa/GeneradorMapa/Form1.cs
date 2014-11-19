@@ -100,7 +100,7 @@ namespace GeneradorMapa
                         if (!inicio)
                         {
                             inicio = true;
-                            texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";0");
+                            texto.Add(Convert.ToString(j) + "," + Convert.ToString(i));
                             robot_ = new Robot(i, j, this);
                         }
                         else
@@ -122,7 +122,7 @@ namespace GeneradorMapa
                 {
                     if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 1)
                     {
-                        texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+                        texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
                     }
                 }
 

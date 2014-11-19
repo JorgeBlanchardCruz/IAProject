@@ -35,7 +35,7 @@ namespace GeneradorMapa
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Sur();
            }
-           if (pos.y + 1 < robot_.get_parent().get_tab().get_rows() && !visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0)
+           if (pos.y + 1 < robot_.get_parent().get_tab().get_columns() && !visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0)
            {
                robot_.set_pos(new Posicion(pos.x, pos.y + 1));
                robot_.actualizarSensores();
@@ -47,7 +47,7 @@ namespace GeneradorMapa
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Norte();
            }
-           if (pos.x + 1 < robot_.get_parent().get_tab().get_columns() && !visitado_[toNodo(pos.x + 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.ESTE] == 0)
+           if (pos.x + 1 < robot_.get_parent().get_tab().get_rows() && !visitado_[toNodo(pos.x + 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.ESTE] == 0)
            {
                robot_.set_pos(new Posicion(pos.x + 1, pos.y));
                robot_.actualizarSensores();

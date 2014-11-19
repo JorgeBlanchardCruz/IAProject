@@ -436,7 +436,7 @@ var C3DWorld = function (Antialias, WaterScene) {
     //METHODS    
         //-------------------------------------------------------
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock }; }
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock}; }
 
         //setters
 

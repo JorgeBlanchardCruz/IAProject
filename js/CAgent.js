@@ -17,7 +17,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     var _Wheatley;  //objeto visual en el mundo 3d  
     ///Para la trayectoria
     var bloque = 0;         //Variable para mover de bloque en bloque
-    var trayectoria = ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']; //Trayectoria a seguir,esta resuelve el camino del mapa de prueba
+   // var trayectoria = ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']; //Trayectoria a seguir,esta resuelve el camino del mapa de prueba
+    var trayectoria = "dwdwwawdwwwwwwwwwawdwwdwwdwaawawwwawwwwwawawwaawwwwwwwwaawawwdwwwwwwwawdwwwawawwwwwwwwawawwwwaawwwwwwwwawawaawawaawwwawaawawdwwwawdwawdwwwwwdwawwawdwawawwwwwwdwwawwawdwawawaawwwawawwaawwdwwaawawwawdwawdwawdwwwwwwdwawdwdwwdwawaawdwawwawawdwawwwwwwawawdwwawwwwwwdwdwawdwwwwwawawwwaawwwdwdwwwawawwwwwawdwawdwawaawawwdwawaawdwwwawwwwawdwwwwwwwwdwdwawaawawwawdwwwwwawaawawwawwawwwwwawdwwwwwdwdwwawdwawdwwwwwwaawwwwwwawawwwwwwwwwwdwaawawwdwdwwaw";
     var iniciar = false;
     var indx = 0;   //Indice para recorrer la trayectoria
 

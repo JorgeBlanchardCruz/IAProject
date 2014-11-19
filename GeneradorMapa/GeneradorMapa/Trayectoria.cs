@@ -14,7 +14,7 @@ namespace GeneradorMapa
         public Trayectoria()
         {
             trayectoria_ = null;
-            dir_ = (int)Direcciones.NORTE;
+            dir_ = (int)Direcciones.SUR;
         }
         public void move_Norte()
         {

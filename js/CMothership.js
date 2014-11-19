@@ -14,7 +14,9 @@ var CMothership = function (Params) {
 
     //PROCEDURES
     function init() {
-        _Agent = new CAgent(Params, 0.05, true, 0, 10);
+
+
+        _Agent = new CAgent(Params, 0.05, true, 14, 15);
     }
 
     //METHODS
