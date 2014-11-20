@@ -14,7 +14,7 @@ namespace GeneradorMapa
            for (int i = 0; i < visitado_.Length; i++)
                visitado_[i] = false;
        }
-       private int toNodo(int i, int j) { return (i * robot_.get_parent().get_tab().get_columns() + j); }
+     
        public override void run()
        {
            runDfs(new Posicion(robot_.get_pos().x, robot_.get_pos().y));

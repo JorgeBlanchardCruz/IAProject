@@ -20,6 +20,7 @@ namespace GeneradorMapa
        private Posicion pos_;
        private Trayectoria trayectoria_;
        private Form1 parent_;
+       private Posicion meta_;
         //Modificar grafo por matriz, realmente es necesario????
       public Robot(int x, int y, Form1 p)
        {
@@ -103,5 +104,6 @@ namespace GeneradorMapa
        public int[] get_sensores() { return sensores_; }
        public Form1 get_parent() { return parent_; }
        public Method get_method() { return metodo_; }
+       public Posicion get_meta() { return meta_; }
     }
 }
