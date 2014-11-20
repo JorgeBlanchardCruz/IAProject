@@ -17,6 +17,7 @@ namespace GeneradorMapa
       private int selected_;
       private bool creado_;
       private Robot robot_;
+
     //  public string prueba;
         public Form1()
         {
@@ -91,6 +92,7 @@ namespace GeneradorMapa
             texto.Add("bloks");
             texto.Add(cad[1] + "x" + cad[0]);
 
+
             for (int i = 0; i < tab_.get_rows(); i++)
             {
                 for (int j = 0; j < tab_.get_columns(); j++)
@@ -101,7 +103,8 @@ namespace GeneradorMapa
                         {
                             inicio = true;
                             texto.Add(Convert.ToString(j) + "," + Convert.ToString(i));
-                            robot_ = new Robot(i, j, this);
+                            robot_ = new Robot(0, 0, i, j, this);
+
                         }
                         else
                             ok = false;
@@ -123,6 +126,7 @@ namespace GeneradorMapa
                     if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 1)
                     {
                         texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+
                     }
                 }
 
@@ -146,6 +150,7 @@ namespace GeneradorMapa
             }
                // MessageBox.Show(texto[2]);
         }
+
 
         private void generar_recorrido()
         {

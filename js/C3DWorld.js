@@ -19,7 +19,7 @@ var C3DWorld = function (Antialias, WaterScene) {
     //ATTRIBUTES
     const SEP_COORD = ',';
     const SET_TYPE = ';';
-    const COLOR_BACKGROUNDSCENE = '#7FBCC9';
+    const COLOR_BACKGROUNDSCENE = '#BDE6F2';
 
         //Objetos para la escena
         var _container;
@@ -78,8 +78,8 @@ var C3DWorld = function (Antialias, WaterScene) {
         //Poned colores y texturas a los blockes asi como el tipo de bloque.
         //(Solo 'obstacle' funcionará para las colisiones)
         _Blocks = [
-            new Block('pared', _TypeBlock[0], '', '#6D7516', 1),
-            new Block('suelo', _TypeBlock[2], '', '#5C4710', 0.25),
+            new Block('suelo', _TypeBlock[2], '', '#C2A159', 0.25),
+            new Block('pared', _TypeBlock[0], '', '#8C7518', 1),
             new Block('escombros', _TypeBlock[1], '', '#DFE36B', 1),
             new Block('pozo', _TypeBlock[0], '', '#6D8EC7', 0.1)
         ];
@@ -389,7 +389,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         MAPMatrix = new Array();
         for (var x = 0; x < _MapWidth ; x++)
             for (var z = 0; z < _MapHeight; z++) {
-                Create_cubeBlock(_Blocks[0], 1, 1, x, 0, z);
+                Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z);
                 MAPMatrix.push([z, x, _TypeBlock[0]]);
             }
 
@@ -472,11 +472,11 @@ var C3DWorld = function (Antialias, WaterScene) {
 
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cubeBlock(_Blocks[1], width, height, (height / 2) - 1, -0.5, (width / 2) - 1);
+            Create_cubeBlock(_Blocks[0], width, height, (height / 2) - 1, -0.5, (width / 2) - 1);
          
-            if (procetype == 'way')
+            if (procetype.substring(0, 3) == 'way')
                 Read_FileMap_Way(content);
-            else
+            else if (procetype.substring(0, 6) == 'blocks')
                 Read_FileMap_Blocks(content);
 
             callback(); //ejecuta las funciones posteriores a cuando termina la carga del mapa

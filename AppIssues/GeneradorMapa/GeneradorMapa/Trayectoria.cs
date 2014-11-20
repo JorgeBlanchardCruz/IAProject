@@ -15,6 +15,7 @@ namespace GeneradorMapa
         {
             trayectoria_ = null;
             dir_ = (int)Direcciones.SUR;
+
         }
         public void move_Norte()
         {
@@ -61,6 +62,8 @@ namespace GeneradorMapa
             }
             dir_ = (int)Direcciones.OESTE;
         }
+
         public string get_trayectoria() { return trayectoria_; }
+
     }
 }

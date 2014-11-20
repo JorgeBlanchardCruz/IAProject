@@ -14,8 +14,9 @@ namespace GeneradorMapa
            for (int i = 0; i < visitado_.Length; i++)
                visitado_[i] = false;
        }
-     
+
        public override void run()
+
        {
            runDfs(new Posicion(robot_.get_pos().x, robot_.get_pos().y));
        }
@@ -23,7 +24,9 @@ namespace GeneradorMapa
        {
            visitado_[toNodo(pos.x, pos.y)] = true;
 
+
            if (pos.y - 1 >= 0 && !visitado_[toNodo(pos.x, pos.y - 1)] && robot_.get_sensores()[(int)Direcciones.NORTE] == 0)
+
            {
                robot_.set_pos(new Posicion (pos.x, pos.y - 1));
                robot_.actualizarSensores();
@@ -35,8 +38,8 @@ namespace GeneradorMapa
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Sur();
            }
-           if (pos.y + 1 < robot_.get_parent().get_tab().get_columns() && !visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0)
-           {
+           if (pos.y + 1 < robot_.get_parent().get_tab().get_columns() && !visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0){
+
                robot_.set_pos(new Posicion(pos.x, pos.y + 1));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Sur();
@@ -70,6 +73,7 @@ namespace GeneradorMapa
                robot_.set_pos(new Posicion(pos.x, pos.y));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Este();
+
            }
        }
     }

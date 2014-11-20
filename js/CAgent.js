@@ -8,6 +8,39 @@
 var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     "use strict";
 
+    //STRUCTURES
+    function path(indx, block, begin, path) {
+        this._indx = indx;
+        this._block = block;
+        this._begin = begin;
+        this._path = path;
+
+        this.add_indx = function (Callback) {  //Recorre el vector de trayectoria
+            if (!this._begin)
+                return;
+
+            if (this._indx < this._path.length - 1) {
+                this._indx++;
+
+                Callback('i');
+            }
+            else if (this._indx >= this._path.length - 1) {
+                this.reset();
+            }
+                 
+        }
+
+         this.get_CurrentMove = function () {
+             return this._path[this._indx];
+         }
+
+         this.reset = function () {
+             this._begin = false;
+             this._indx = 0;
+         }
+    }
+
+
     //ATTRIBUTES
     const _MAXSWING = 0.03;
     const _SWINGSPEED = 0.001;
@@ -34,12 +67,16 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     var _movement = 'stop';
     
     var _direction = 0;
+
+    //path
+    var _Path;
     
     //temp variable
-    var camera_position;
+    var obj_position;
 
     //INITIALIZE
     init();
+    init_TestPath();
 
     //PROCEDURES
     // Converts from radians to degrees.
@@ -52,12 +89,17 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     };
 
     function init() {
-        camera_position = document.getElementById('camera_position');
+        obj_position = document.getElementById('camera_position');
         Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
 
         animate();
     }
-    
+
+    function init_TestPath() {
+                                        //esto es una ruta de prueba
+        _Path = new path(0, 0, false, ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']);
+    }
+
     function Load_objmtl(fileobj, filemtl, x, y, z, scalex, scaley, scalez) {
         try {
             THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
@@ -83,6 +125,14 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
    /* function Move(movement) {
         _movement = movement;
 
+        if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
+            _Path._begin = true;
+            _movement = 'stop';
+        }
+    
+        if (_Path._begin)
+            _movement = _Path.get_CurrentMove();
+
         var rotate = 0;
         switch (_movement) {
             case 'a':
@@ -91,7 +141,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
             case 'd':
                 rotate = Math.degrees(Math.PI / 2) * (-1);
                 break;
-            default: 
+            default:
                 break;
         }
 
@@ -100,19 +150,21 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         function Calculate_direction(rotate) {
             _direction += rotate;
             _direction = (_direction == -90 ? 270 : _direction);
-            _direction = (_direction >= 360 ? 0 : _direction);       
+            _direction = (_direction >= 360 ? 0 : _direction);
         }
     }
 
     function AccionAnimation() {
-        switch (_movement) {
-            case 'w':      
-                _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
+        switch (_movement.toLowerCase()) {
+            case 'w':
+                BlockbyBlock();
                 break;
             case 'a':
             case 'd':
                 _Visualobj.rotation.y = Math.radians(_direction);
                 _movement = 'stop';
+
+                _Path.add_indx(Move);
                 break;
             default: //stop
                 _Visualobj.translateZ(0);
@@ -121,8 +173,21 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
         Swing();
         
-        //camera_position.innerHTML = 'obj position: ' + _Visualobj.position.x.toFixed(2).toString() + ';' + _Visualobj.position.y.toFixed(2).toString() + ';' + _Visualobj.position.z.toFixed(2).toString();
-        camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
+        obj_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
+    }
+
+    function BlockbyBlock() {
+        if (_Path.block < 1) {
+            _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
+            _Path.block += _speed;
+        }
+        else {      
+            _movement = 'stop';
+            _Visualobj.translateZ(0);
+
+            _Path.block = 0;
+            _Path.add_indx(Move);
+        }
     }
     */
     function Move(movement) {
@@ -216,6 +281,12 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                     possible = false;
                 break;
         }
+
+        if (!possible) {
+            _movement = 'stop'
+            _Path.reset();
+        }
+            
         _movement = (possible == false ? 'stop' : _movement);
         return possible;
     }
@@ -240,6 +311,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = (object.position.z - (object.scale.z / 2)) - (_Visualobj.position.z + (_SIZE / 2));
                                 if (distancetoObstacle <= 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -250,6 +323,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = Math.abs((object.position.z - (object.scale.z / 2)) - (_Visualobj.position.z + (_SIZE / 2)));
                                 if (distancetoObstacle == 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -267,6 +342,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = (_Visualobj.position.z - (_SIZE / 2)) - (object.position.z + (object.scale.z / 2));
                                 if (distancetoObstacle <= 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -277,6 +354,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = Math.abs((_Visualobj.position.z - (_SIZE / 2)) - (object.position.z + (object.scale.z / 2)));
                                 if (distancetoObstacle == 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -294,6 +373,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = (object.position.x - (object.scale.x / 2)) - (_Visualobj.position.x + (_SIZE / 2));
                                 if (distancetoObstacle <= 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -304,6 +385,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = Math.abs((object.position.x - (object.scale.x / 2)) - (_Visualobj.position.x + (_SIZE / 2)));
                                 if (distancetoObstacle == 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }
@@ -330,6 +413,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                                 var distancetoObstacle = Math.abs((_Visualobj.position.x - (_SIZE / 2)) - (object.position.x + (object.scale.x / 2)));
                                 if (distancetoObstacle == 0.0) { //comprobamos la distancia del cercano
                                     _movement = Params.typesblocks[0] + _direction;
+
+                                    _Path.reset();
                                     return false;
                                 }
                             }

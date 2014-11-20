@@ -13,10 +13,11 @@ namespace GeneradorMapa
         {
             robot_ = r;
         }
-        public virtual void run() { 
-        }
 
         protected int toNodo(int i, int j) { return (i * robot_.get_parent().get_tab().get_columns() + j); }
         protected int toNodo(Posicion pos) { return (pos.x * robot_.get_parent().get_tab().get_columns() + pos.y); }
+
+        public virtual void run() {}
+
     }
 }
