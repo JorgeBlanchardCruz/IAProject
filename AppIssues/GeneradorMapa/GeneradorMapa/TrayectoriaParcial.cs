@@ -17,7 +17,7 @@ namespace GeneradorMapa
        {
            coste_ = 0;
            recorrido_ = null;
-           nodos_ = new List<int>;
+           nodos_ = new List<int>();
            Nfinal_ = -1;
        }
 

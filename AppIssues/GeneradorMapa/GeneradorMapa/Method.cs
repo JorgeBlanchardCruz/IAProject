@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneradorMapa
 {
-    class Method
+    public class Method
     {
         protected Robot robot_;
         public Method(Robot r)

@@ -89,7 +89,7 @@ namespace GeneradorMapa
             bool inicio = false;
             bool final = false;
 
-            texto.Add("bloks");
+            texto.Add("blocks");
             texto.Add(cad[1] + "x" + cad[0]);
 
 

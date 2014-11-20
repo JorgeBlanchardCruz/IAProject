@@ -8,11 +8,11 @@ namespace GeneradorMapa
 {
    
     enum Direcciones{NORTE  = 0, SUR = 1, ESTE = 2, OESTE = 3};
-    struct Posicion {
+    public struct Posicion {
         public int x, y; 
         public Posicion (int a, int b) {x = a; y = b;}
     }
-    class Robot
+    public class Robot
     {
        private int[] sensores_;
      //  private List<int>[] mapaConocido_;
