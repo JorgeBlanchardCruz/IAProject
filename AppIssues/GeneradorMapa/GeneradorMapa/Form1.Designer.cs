@@ -32,6 +32,7 @@
             this.crearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.Panel();
+            this.panel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -112,33 +113,31 @@
             this.groupBox1.Controls.Add(this.pictureBox4);
             this.groupBox1.Controls.Add(this.pictureBox5);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox1.Location = new System.Drawing.Point(12, 180);
+            this.groupBox1.Location = new System.Drawing.Point(0, 48);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 48);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-           // this.groupBox1.Text = "Elementos";
-            // 
-            // pictureBox1
-     /*       // 
-            this.pictureBox1.Location = new System.Drawing.Point(92, 110);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(51, 50);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // */
+       
+            // Panel
+            this.panel.AutoScroll = true;
+            this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel.Location = new System.Drawing.Point(0, 0);
+            this.panel.Size = new System.Drawing.Size(284, 163);
+            this.panel.TabIndex = 5;
+
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(284, 262);
-          
+            this.Controls.Add(this.panel);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
+            
             /////METER LOS FOR PARA TODA LA CUADRICULA
             for (int i = 0; i < tab_.get_rows(); i++)
             {
@@ -158,7 +157,7 @@
             this.menuStrip1.PerformLayout();
          //   ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
+          //  this.PerformLayout();
 
         }
 
@@ -168,6 +167,7 @@
         private System.Windows.Forms.ToolStripMenuItem crearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generarToolStripMenuItem;
         private System.Windows.Forms.Panel groupBox1;
+        private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;

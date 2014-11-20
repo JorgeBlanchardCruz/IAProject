@@ -31,7 +31,8 @@ namespace GeneradorMapa
             InitializeComponent();
             //this.Opacity = .75;
             this.WindowState = FormWindowState.Maximized;
-           
+            //Paleta p = new Paleta();
+           // p.Show();
         }
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -72,7 +73,7 @@ namespace GeneradorMapa
                 {
                     for (int j = 0; j < tab_.get_columns(); j++)
                     {
-                        this.Controls.Add(this.tab_.get_Celda(i, j));
+                        this.panel.Controls.Add(this.tab_.get_Celda(i, j));
                         this.tab_.get_Celda(i, j).Click += new System.EventHandler(this.tab_.get_Celda(i, j).Celda_Click);
                     }
                 }
