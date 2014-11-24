@@ -20,6 +20,7 @@ var C3DWorld = function (Antialias, WaterScene) {
     const SEP_COORD = ',';
     const SET_TYPE = ';';
     const COLOR_BACKGROUNDSCENE = '#BDE6F2';
+    const LIMAP_CONTENT = 4;
 
         //Objetos para la escena
         var _container;
@@ -30,10 +31,13 @@ var C3DWorld = function (Antialias, WaterScene) {
         //atributos del mapa
         var MAPMatrix; //estoy hay que mejorarlo, lo he dejado así de forma provisional
         var _MapWidth = 0, _MapHeight = 0;
+        var _Path;
+        var _Agentz, _Agentx;
         //---------------------
 
     var _TypeBlock;
     var _Blocks;
+ 
     
     //INITIALIZE
     init();
@@ -394,7 +398,7 @@ var C3DWorld = function (Antialias, WaterScene) {
             }
 
         //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
-        for (var i = 3; i < content.length; i++) {
+        for (var i = LIMAP_CONTENT; i < content.length; i++) {
             var line = content[i];
             var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
             var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
@@ -418,7 +422,7 @@ var C3DWorld = function (Antialias, WaterScene) {
                 MAPMatrix.push([z, x, -1]);
 
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
-        for (var i = 3; i < content.length; i++) {
+        for (var i = LIMAP_CONTENT; i < content.length; i++) {
             var line = content[i];
             var z = Number(line.substring(0, line.lastIndexOf(SEP_COORD)));
             var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
@@ -435,7 +439,7 @@ var C3DWorld = function (Antialias, WaterScene) {
     //METHODS    
         //-------------------------------------------------------
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock }; }
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock, path: _Path, posAgent: [_Agentz, _Agentx] }; }
 
         //setters
 
@@ -448,8 +452,9 @@ var C3DWorld = function (Antialias, WaterScene) {
             1ª línea: especifica 'way' (se eliminarán los bloques que crean los caminos) 
                         o 'blocks' (donde se añadirán los boques introducidos)
             2ª línea: tamaño del mapa (ejemplo: 15x15)
-            3ª línea: se definirá la posición de los Agentes o robots (z,x;ángulo)
-            4ª línea en adelante: posición de los bloques o caminos con el formato z,x;tipobloque.
+            3ª línea: se definirá la posición de los Agentes o robots (z,x)
+            4ª línea: se definirá la trayectoria que recorrerá el agente, ejemplo: wwwwwwswwwwawwwwww
+            5ª línea en adelante: posición de los bloques o caminos con el formato z,x;tipobloque.
 
         */
         var reader = new FileReader();
@@ -472,6 +477,13 @@ var C3DWorld = function (Antialias, WaterScene) {
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
             Create_cubeBlock(_Blocks[0], width, height, (height / 2) - 1, -0.5, (width / 2) - 1);
+
+            //recoge la posición del agente
+            _Agentz = Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD)));
+            _Agentx = Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2));
+
+            //recoge la trayectoria del agente
+            _Path = content[3].substring(0, content.length - 2);
          
             if (procetype.substring(0, 3) == 'way')
                 Read_FileMap_Way(content);

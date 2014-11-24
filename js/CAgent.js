@@ -32,7 +32,16 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
         this.get_CurrentMove = function () {
             return this._path[this._indx];
-         }
+        }
+
+        this.play = function () {
+            this._begin = true;
+            _movement = 'stop';
+        }
+
+        this.stop = function () {
+            this._begin = false;
+        }
 
         this.reset = function () {
              this._begin = false;
@@ -109,13 +118,11 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     function Move(movement) {
         _movement = movement;
 
-        if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
-            _Path._begin = true;
-            _movement = 'stop';
-        }
+        //Pulsar i para iniciar el recorrido
+        if (movement == 'i') _Path.play();
+        else                 _Path.stop();
     
-        if (_Path._begin)
-            _movement = _Path.get_CurrentMove();
+        if (_Path._begin) { _movement = _Path.get_CurrentMove(); }
 
         var rotate = 0;
         switch (_movement) {
