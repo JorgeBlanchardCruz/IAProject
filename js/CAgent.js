@@ -13,7 +13,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         this._indx = indx;
         this._block = block;
         this._begin = begin;
-        this._path = path;
+        this._path = path.toString().split(''); //convierte por ejemplo: wwwdaww a 'w','w','w','d','a','w','w'
 
         this.add_indx = function (Callback) {  //Recorre el vector de trayectoria
             if (!this._begin)
@@ -30,11 +30,11 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                  
         }
 
-         this.get_CurrentMove = function () {
-             return this._path[this._indx];
+        this.get_CurrentMove = function () {
+            return this._path[this._indx];
          }
 
-         this.reset = function () {
+        this.reset = function () {
              this._begin = false;
              this._indx = 0;
          }
@@ -46,17 +46,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     const _SWINGSPEED = 0.001;
     const _SIZE = 0.3;
 
-
-    var _Wheatley;  //objeto visual en el mundo 3d  
-    ///Para la trayectoria
-    var bloque = 0;         //Variable para mover de bloque en bloque
-   // var trayectoria = ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']; //Trayectoria a seguir,esta resuelve el camino del mapa de prueba
-    var trayectoria = "dwdwwawdwwwwwwwwwawdwwdwwdwaawawwwawwwwwawawwaawwwwwwwwaawawwdwwwwwwwawdwwwawawwwwwwwwawawwwwaawwwwwwwwawawaawawaawwwawaawawdwwwawdwawdwwwwwdwawwawdwawawwwwwwdwwawwawdwawawaawwwawawwaawwdwwaawawwawdwawdwawdwwwwwwdwawdwdwwdwawaawdwawwawawdwawwwwwwawawdwwawwwwwwdwdwawdwwwwwawawwwaawwwdwdwwwawawwwwwawdwawdwawaawawwdwawaawdwwwawwwwawdwwwwwwwwdwdwawaawawwawdwwwwwawaawawwawwawwwwwawdwwwwwdwdwwawdwawdwwwwwwaawwwwwwawawwwwwwwwwwdwaawawwdwdwwaw";
-    var iniciar = false;
-    var indx = 0;   //Indice para recorrer la trayectoria
-
     var _Visualobj;  //objeto visual en el mundo 3d  
-
 
     //SWING
     var _countswing = 0;
@@ -76,7 +66,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     //INITIALIZE
     init();
-    init_TestPath();
 
     //PROCEDURES
     // Converts from radians to degrees.
@@ -93,11 +82,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
 
         animate();
-    }
-
-    function init_TestPath() {
-                                        //esto es una ruta de prueba
-        _Path = new path(0, 0, false, ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']);
     }
 
     function Load_objmtl(fileobj, filemtl, x, y, z, scalex, scaley, scalez) {
@@ -122,7 +106,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         catch (err) { console.log(err); }
     }
 
-   /* function Move(movement) {
+    function Move(movement) {
         _movement = movement;
 
         if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
@@ -189,78 +173,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
             _Path.add_indx(Move);
         }
     }
-    */
-    function Move(movement) {
-        if (movement == 'i') {  //Pulsar i para iniciar el recorrido, se puede cambiar por un boton o algo, esto es solo para probar
-            iniciar = true;
-            _movement = 'stop';
-        }
 
-
-        if (iniciar) {
-            _movement = trayectoria[indx];
-            var rotate = 0;
-            switch (_movement) {
-                case 'a':
-                    rotate = Math.degrees(Math.PI / 2);
-                    break;
-                case 'd':
-                    rotate = Math.degrees(Math.PI / 2) * (-1);
-                    break;
-                default:
-                    break;
-            }
-
-            Calculate_direction(rotate);
-
-        }
-
-        function Calculate_direction(rotate) {
-            _direction += rotate;
-            _direction = (_direction == -90 ? 270 : _direction);
-            _direction = (_direction >= 360 ? 0 : _direction);
-        }
-    }
-    function AccionAnimation() {
-        switch (_movement) {
-            case 'w':
-                // _Wheatley.translateZ((Borders_Delimeters() ? (Collisions() ? _speed : 0) : 0));
-                MoverUnBloque();    //Mueve un bloque completo 
-                break;
-            case 'a':
-            case 'd':
-                _Visualobj.rotation.y = Math.radians(_direction);
-                _movement = 'stop';
-                add_indx(); //Suma uno al indicie para seguir con el siguiente movimiento
-                break;
-            default: //stop
-                _Visualobj.translateZ(0);
-                break;
-        }
-
-        Swing();
-
-        //camera_position.innerHTML = 'obj position: ' + _Wheatley.position.x.toFixed(2).toString() + ';' + _Wheatley.position.y.toFixed(2).toString() + ';' + _Wheatley.position.z.toFixed(2).toString();
-        camera_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
-    }
-    function MoverUnBloque() {
-        if (bloque < 1) {
-            _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
-            bloque += _speed;
-        }
-        else {
-            bloque = 0;
-            _movement = 'stop';
-            _Visualobj.translateZ(0);
-            add_indx();
-        }
-    }
-    function add_indx() {   //Recorre el vector de trayectoria
-        if (indx < trayectoria.length - 1) {
-            indx++;
-            Move('i');
-        }
-    }
     function Borders_Delimeters() {
         var possible = true;
         switch (_direction) { //según el movimiento Wheatley en el mapa
@@ -452,5 +365,9 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     //METHODS
     this.Move = function (movement) { Move(movement); };
+
+    this.SetPath = function (agentpath) {
+        _Path = new path(0, 0, false, agentpath);
+    }
 
 };

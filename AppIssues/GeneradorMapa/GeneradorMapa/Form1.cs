@@ -62,7 +62,7 @@ namespace GeneradorMapa
             catch (FormatException)
             {
                 ok = false;
-                MessageBox.Show("Debe ser formato FILASxCOLUMNASxOBSTACULOS");
+                MessageBox.Show("Debe ser formato COLUMNASxFILASxOBSTACULOS");
             }
        
             if (ok)

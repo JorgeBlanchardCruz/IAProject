@@ -16,7 +16,15 @@ namespace GeneradorMapa
 
         protected int toNodo(int i, int j) { return (i * robot_.get_parent().get_tab().get_columns() + j); }
         protected int toNodo(Posicion pos) { return (pos.x * robot_.get_parent().get_tab().get_columns() + pos.y); }
+        protected Posicion toPosicion(int nodo)
+        {
+            //Probar esto
 
+            int i = (int) Math.Floor((double) ((double)nodo / (double)robot_.get_parent().get_tab().get_columns()) );
+            int j = nodo % robot_.get_parent().get_tab().get_columns();
+
+            return (new Posicion(i, j));
+        }
         public virtual void run() {}
 
     }

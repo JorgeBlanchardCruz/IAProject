@@ -1,4 +1,10 @@
 
+/**
+ * @author Jorge O. Blanchard Cruz
+ * 
+ */
+
+
 "use strict";
 
 window.onload = main;
@@ -13,7 +19,7 @@ var file_input;
 
 function main() {
 
-    MapCAVE = new C3DWorld(true, false);
+    MapCAVE = new C3DWorld(true, true);
     MapParams = MapCAVE.get_Params();
     
     set_HTMLObjects();

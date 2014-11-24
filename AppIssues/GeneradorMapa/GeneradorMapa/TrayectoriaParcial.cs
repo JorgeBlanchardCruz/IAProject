@@ -20,7 +20,14 @@ namespace GeneradorMapa
            nodos_ = new List<int>();
            Nfinal_ = -1;
        }
+       public TrayectoriaParcial (TrayectoriaParcial other){
+      
+        this.coste_ = other.coste_;
+        this.Nfinal_ = other.Nfinal_;
+        this.recorrido_ = new string(other.recorrido_.ToCharArray());
+        this.nodos_ = new List<int>(other.nodos_.ToArray());
 
+   }
        public float get_coste() {return coste_;}
        public void set_coste(float c) { coste_ = c; }
        public int get_Nfinal() { return Nfinal_; }
