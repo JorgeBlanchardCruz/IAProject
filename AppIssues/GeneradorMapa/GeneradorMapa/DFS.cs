@@ -14,8 +14,9 @@ namespace GeneradorMapa
            for (int i = 0; i < visitado_.Length; i++)
                visitado_[i] = false;
        }
-       private int toNodo(int i, int j) { return (i * robot_.get_parent().get_tab().get_columns() + j); }
-       public void run()
+
+       public override void run()
+
        {
            runDfs(new Posicion(robot_.get_pos().x, robot_.get_pos().y));
        }
@@ -23,33 +24,56 @@ namespace GeneradorMapa
        {
            visitado_[toNodo(pos.x, pos.y)] = true;
 
-           if (!visitado_[toNodo(pos.x, pos.y - 1)] && robot_.get_sensores()[(int)Direcciones.NORTE] == 0)
+
+           if (pos.y - 1 >= 0 && !visitado_[toNodo(pos.x, pos.y - 1)] && robot_.get_sensores()[(int)Direcciones.NORTE] == 0)
+
            {
                robot_.set_pos(new Posicion (pos.x, pos.y - 1));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Norte();
+
                runDfs(new Posicion (pos.x, pos.y - 1));
+
+               robot_.set_pos(new Posicion(pos.x, pos.y));
+               robot_.actualizarSensores();
+               robot_.get_trayectoria().move_Sur();
            }
-           else if (!visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0)
-           {
+           if (pos.y + 1 < robot_.get_parent().get_tab().get_columns() && !visitado_[toNodo(pos.x, pos.y + 1)] && robot_.get_sensores()[(int)Direcciones.SUR] == 0){
+
                robot_.set_pos(new Posicion(pos.x, pos.y + 1));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Sur();
+
                runDfs(new Posicion(pos.x, pos.y + 1));
+
+               robot_.set_pos(new Posicion(pos.x, pos.y));
+               robot_.actualizarSensores();
+               robot_.get_trayectoria().move_Norte();
            }
-           else if (!visitado_[toNodo(pos.x + 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.ESTE] == 0)
+           if (pos.x + 1 < robot_.get_parent().get_tab().get_rows() && !visitado_[toNodo(pos.x + 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.ESTE] == 0)
            {
                robot_.set_pos(new Posicion(pos.x + 1, pos.y));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Este();
+
                runDfs(new Posicion(pos.x + 1, pos.y));
+
+               robot_.set_pos(new Posicion(pos.x, pos.y));
+               robot_.actualizarSensores();
+               robot_.get_trayectoria().move_Oeste();
            }
-           else if (!visitado_[toNodo(pos.x - 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.OESTE] == 0)
+           if (pos.x - 1 >= 0 && !visitado_[toNodo(pos.x - 1, pos.y)] && robot_.get_sensores()[(int)Direcciones.OESTE] == 0)
            {
                robot_.set_pos(new Posicion(pos.x - 1, pos.y));
                robot_.actualizarSensores();
                robot_.get_trayectoria().move_Oeste();
+
                runDfs(new Posicion(pos.x - 1, pos.y));
+
+               robot_.set_pos(new Posicion(pos.x, pos.y));
+               robot_.actualizarSensores();
+               robot_.get_trayectoria().move_Este();
+
            }
        }
     }

@@ -8,11 +8,11 @@ namespace GeneradorMapa
 {
    
     enum Direcciones{NORTE  = 0, SUR = 1, ESTE = 2, OESTE = 3};
-    struct Posicion {
+    public struct Posicion {
         public int x, y; 
         public Posicion (int a, int b) {x = a; y = b;}
     }
-    class Robot
+    public class Robot
     {
        private int[] sensores_;
      //  private List<int>[] mapaConocido_;
@@ -20,15 +20,20 @@ namespace GeneradorMapa
        private Posicion pos_;
        private Trayectoria trayectoria_;
        private Form1 parent_;
+       private Posicion meta_;
         //Modificar grafo por matriz, realmente es necesario????
-       Robot(int a, int b, int x, int y, Form1 p)
+
+        //Modificar grafo por matriz, realmente es necesario????
+       public Robot(int a, int b, int x, int y, Form1 p)
        {
-           metodo_ = new DFS(this);
            sensores_ = new int[4];
        //    mapaConocido_ = new List<int>[a * b];
            pos_ = new Posicion(x, y);
+           meta_ = new Posicion(a, b);
            parent_ = p;
            trayectoria_ = new Trayectoria();
+           actualizarSensores();
+           metodo_ = new DFS(this);
        }
        
        public void actualizarSensores()
@@ -100,5 +105,9 @@ namespace GeneradorMapa
        public Trayectoria get_trayectoria() { return trayectoria_; }
        public int[] get_sensores() { return sensores_; }
        public Form1 get_parent() { return parent_; }
+
+       public Method get_method() { return metodo_; }
+       public Posicion get_meta() { return meta_; }
+
     }
 }

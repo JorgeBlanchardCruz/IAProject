@@ -16,10 +16,13 @@ namespace GeneradorMapa
       private Cuadricula tab_;
       private int selected_;
       private bool creado_;
+      private Robot robot_;
+
     //  public string prueba;
         public Form1()
         {
         //    prueba = "hola";
+            robot_ = null;
             creado_ = false;
             entrada = null;
             selected_ = -1;
@@ -28,7 +31,8 @@ namespace GeneradorMapa
             InitializeComponent();
             //this.Opacity = .75;
             this.WindowState = FormWindowState.Maximized;
-           
+            //Paleta p = new Paleta();
+           // p.Show();
         }
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,7 +62,7 @@ namespace GeneradorMapa
             catch (FormatException)
             {
                 ok = false;
-                MessageBox.Show("Debe ser formato FILASxCOLUMNASxOBSTACULOS");
+                MessageBox.Show("Debe ser formato COLUMNASxFILASxOBSTACULOS");
             }
        
             if (ok)
@@ -69,7 +73,7 @@ namespace GeneradorMapa
                 {
                     for (int j = 0; j < tab_.get_columns(); j++)
                     {
-                        this.Controls.Add(this.tab_.get_Celda(i, j));
+                        this.panel.Controls.Add(this.tab_.get_Celda(i, j));
                         this.tab_.get_Celda(i, j).Click += new System.EventHandler(this.tab_.get_Celda(i, j).Celda_Click);
                     }
                 }
@@ -86,8 +90,9 @@ namespace GeneradorMapa
             bool inicio = false;
             bool final = false;
 
-            texto.Add("bloks");
-            texto.Add(cad[0] + "x" + cad[1]);
+            texto.Add("blocks");
+            texto.Add(cad[1] + "x" + cad[0]);
+
 
             for (int i = 0; i < tab_.get_rows(); i++)
             {
@@ -98,7 +103,9 @@ namespace GeneradorMapa
                         if (!inicio)
                         {
                             inicio = true;
-                            texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";0");
+                            texto.Add(Convert.ToString(j) + "," + Convert.ToString(i));
+                            robot_ = new Robot(0, 0, i, j, this);
+
                         }
                         else
                             ok = false;
@@ -119,11 +126,15 @@ namespace GeneradorMapa
                 {
                     if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 1)
                     {
-                        texto.Add(Convert.ToString(i) + "," + Convert.ToString(j) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+                        texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+
                     }
                 }
 
             }
+
+            generar_recorrido();
+            texto.Add(robot_.get_trayectoria().get_trayectoria());
 
             if (ok)
             {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
@@ -139,6 +150,12 @@ namespace GeneradorMapa
                 }
             }
                // MessageBox.Show(texto[2]);
+        }
+
+
+        private void generar_recorrido()
+        {
+            robot_.get_method().run();
         }
         public string getent() { return entrada; }
         public void setent(string s) {  entrada = s; }
