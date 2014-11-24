@@ -13,7 +13,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         this._indx = indx;
         this._block = block;
         this._begin = begin;
-        this._path = path;
+        this._path = path.toString().split(''); //convierte por ejemplo: wwwdaww a 'w','w','w','d','a','w','w'
 
         this.add_indx = function (Callback) {  //Recorre el vector de trayectoria
             if (!this._begin)
@@ -30,11 +30,11 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                  
         }
 
-         this.get_CurrentMove = function () {
-             return this._path[this._indx];
+        this.get_CurrentMove = function () {
+            return this._path[this._indx];
          }
 
-         this.reset = function () {
+        this.reset = function () {
              this._begin = false;
              this._indx = 0;
          }
@@ -66,7 +66,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     //INITIALIZE
     init();
-    init_TestPath();
 
     //PROCEDURES
     // Converts from radians to degrees.
@@ -83,11 +82,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
 
         animate();
-    }
-
-    function init_TestPath() {
-                                        //esto es una ruta de prueba
-        _Path = new path(0, 0, false, ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'd', 'w', 'w', 'w', 'a', 'w', 'w', 'w', 'w', 'w', 'w', 'w']);
     }
 
     function Load_objmtl(fileobj, filemtl, x, y, z, scalex, scaley, scalez) {
@@ -371,5 +365,9 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     //METHODS
     this.Move = function (movement) { Move(movement); };
+
+    this.SetPath = function (agentpath) {
+        _Path = new path(0, 0, false, agentpath);
+    }
 
 };
