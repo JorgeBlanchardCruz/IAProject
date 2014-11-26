@@ -31,7 +31,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         }
 
         this.get_CurrentMove = function () {
-            temp_path += this._indx;
             return this._path[this._indx];
         }
 
@@ -72,8 +71,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     
     //temp variable
     var obj_position;
-    var obj_path;
-    var temp_path = '';
 
     //INITIALIZE
     init();
@@ -90,7 +87,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     function init() {
         obj_position = document.getElementById('info1');
-        obj_path     = document.getElementById('info2');
+
         Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
 
         animate();

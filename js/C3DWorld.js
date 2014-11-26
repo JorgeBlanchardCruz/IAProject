@@ -488,7 +488,7 @@ var C3DWorld = function (Antialias, WaterScene) {
 
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cubeBlock(_Blocks[0], width, height, (height / 2) - 1, -0.5, (width / 2) - 1);
+            Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1);
 
             //recoge la posición del agente
             _Agentz = Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD)));
