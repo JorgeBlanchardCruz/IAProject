@@ -170,39 +170,39 @@ namespace GeneradorMapa
      
         private void pic1_Click(object sender, EventArgs e)
         {
-            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blancoM;
+            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3M;
             
             switch (selected_)
             {
-                case 1: this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojo; break;
-                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azul; break;
+                case 1: this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verde; break;
+                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
                 default: break;
             }
             selected_ = 0;
         }
         private void pic2_Click(object sender, EventArgs e)
         {
-            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojoM;
+            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.InicioM;
             switch (selected_)
             {
-                case 0: pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco; break;
-                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azul; break;
+                case 0: pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
+                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verde; break;
+                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
             selected_ = 1;
         }
         private void pic3_Click(object sender, EventArgs e)
         {
-            this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azulM;
+            this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.FinM;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojo; break;
-                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco; break;
+                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verde; break;
+                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
             selected_ = 2;
         }
@@ -211,22 +211,22 @@ namespace GeneradorMapa
             this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.waterM;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojo; break;
-                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azul; break;
-                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verde; break;
+                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
+                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
+                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
             selected_ = 3;
         }
         private void pic5_Click(object sender, EventArgs e)
         {
-            this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verdeM;
+            this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4M;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojo; break;
-                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azul; break;
+                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco; break;
+                case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
             }
             selected_ = 4;
         }

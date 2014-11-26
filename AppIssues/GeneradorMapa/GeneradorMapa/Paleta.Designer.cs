@@ -39,7 +39,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rojo;
+            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.Inicio;
             this.pictureBox1.Location = new System.Drawing.Point(16, 43);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
@@ -61,7 +61,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.azul;
+            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Fin;
             this.pictureBox2.Location = new System.Drawing.Point(54, 43);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(32, 32);

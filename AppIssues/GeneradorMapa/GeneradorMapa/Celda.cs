@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneradorMapa
 {
-    public class Celda : System.Windows.Forms.PictureBox
+    public class Celda : System.Windows.Forms.Label
     {
        // private System.Windows.Forms.PictureBox Img_;
         private int indx_;
@@ -18,7 +18,7 @@ namespace GeneradorMapa
             this.Location = new System.Drawing.Point(50+ 32*i, 50 + 32*j);
           //  this.Name = "c";
             this.Size = new System.Drawing.Size(32, 32);
-            this.TabIndex = i + j;
+          //  this.TabIndex = i + j;
             this.TabStop = false;
             //this.Image = global::GeneradorMapa.Properties.Resources.blanco;
             ActualizarImagen();
@@ -34,11 +34,11 @@ namespace GeneradorMapa
        {
            switch (indx_)
            {
-               case 0: this.Image = global::GeneradorMapa.Properties.Resources.blanco; break;
-               case 1: this.Image = global::GeneradorMapa.Properties.Resources.rojo; break;
-               case 2: this.Image = global::GeneradorMapa.Properties.Resources.azul; break;
+               case 0: this.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
+               case 1: this.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+               case 2: this.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                case 3: this.Image = global::GeneradorMapa.Properties.Resources.water; break;
-               case 4: this.Image = global::GeneradorMapa.Properties.Resources.verde; break;
+               case 4: this.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
            }
        }
     }

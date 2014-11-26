@@ -66,7 +66,7 @@
             this.generarToolStripMenuItem.Text = "Generar mapa";
             this.generarToolStripMenuItem.Click += new System.EventHandler(this.generarToolStripMenuItem_Click);
             // 
-            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.blanco;
+            this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3;
             this.pictureBox1.Location = new System.Drawing.Point(8, 8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
@@ -74,7 +74,7 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pic1_Click);
             //
-            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.rojo;
+            this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio;
             this.pictureBox2.Location = new System.Drawing.Point(48, 8);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(32, 32);
@@ -82,7 +82,7 @@
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pic2_Click);
             //
-            this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.azul;
+            this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin;
             this.pictureBox3.Location = new System.Drawing.Point(88, 8);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(32, 32);
@@ -98,7 +98,7 @@
             this.pictureBox4.TabStop = false;
             this.pictureBox4.Click += new System.EventHandler(this.pic4_Click);
             //
-            this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.verde;
+            this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4;
             this.pictureBox5.Location = new System.Drawing.Point(168, 8);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(32, 32);
@@ -139,14 +139,14 @@
             this.Controls.Add(this.groupBox1);
             
             /////METER LOS FOR PARA TODA LA CUADRICULA
-            for (int i = 0; i < tab_.get_rows(); i++)
+        /*    for (int i = 0; i < tab_.get_rows(); i++)
             {
                 for (int j = 0; j < tab_.get_columns(); j++)
                 {
                     this.Controls.Add(this.tab_.get_Celda(i, j));
                     this.tab_.get_Celda(i, j).Click += new System.EventHandler(this.tab_.get_Celda(i, j).Celda_Click);
                 }
-            }
+            }*/
 
 
             this.MainMenuStrip = this.menuStrip1;
@@ -155,6 +155,7 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.DoubleBuffered = true;
          //   ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
           //  this.PerformLayout();

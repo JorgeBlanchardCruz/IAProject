@@ -63,29 +63,9 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap azul {
-            get {
-                object obj = ResourceManager.GetObject("azul", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap azulM {
             get {
                 object obj = ResourceManager.GetObject("azulM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap blanco {
-            get {
-                object obj = ResourceManager.GetObject("blanco", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +83,9 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap grass {
+        internal static System.Drawing.Bitmap Fin {
             get {
-                object obj = ResourceManager.GetObject("grass", resourceCulture);
+                object obj = ResourceManager.GetObject("Fin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +93,9 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap metal {
+        internal static System.Drawing.Bitmap FinM {
             get {
-                object obj = ResourceManager.GetObject("metal", resourceCulture);
+                object obj = ResourceManager.GetObject("FinM", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +103,9 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap plywood {
+        internal static System.Drawing.Bitmap Inicio {
             get {
-                object obj = ResourceManager.GetObject("plywood", resourceCulture);
+                object obj = ResourceManager.GetObject("Inicio", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +113,9 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap rocks {
+        internal static System.Drawing.Bitmap InicioM {
             get {
-                object obj = ResourceManager.GetObject("rocks", resourceCulture);
+                object obj = ResourceManager.GetObject("InicioM", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +123,49 @@ namespace GeneradorMapa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap rojo {
+        internal static System.Drawing.Bitmap rock3 {
             get {
-                object obj = ResourceManager.GetObject("rojo", resourceCulture);
+                object obj = ResourceManager.GetObject("rock3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rock3M {
+            get {
+                object obj = ResourceManager.GetObject("rock3M", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rock4 {
+            get {
+                object obj = ResourceManager.GetObject("rock4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rock4M {
+            get {
+                object obj = ResourceManager.GetObject("rock4M", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rock5 {
+            get {
+                object obj = ResourceManager.GetObject("rock5", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -156,16 +176,6 @@ namespace GeneradorMapa.Properties {
         internal static System.Drawing.Bitmap rojoM {
             get {
                 object obj = ResourceManager.GetObject("rojoM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap verde {
-            get {
-                object obj = ResourceManager.GetObject("verde", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -196,26 +206,6 @@ namespace GeneradorMapa.Properties {
         internal static System.Drawing.Bitmap waterM {
             get {
                 object obj = ResourceManager.GetObject("waterM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap waternormals {
-            get {
-                object obj = ResourceManager.GetObject("waternormals", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap wood {
-            get {
-                object obj = ResourceManager.GetObject("wood", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

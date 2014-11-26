@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -71,6 +71,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Robot.cs" />
     <Compile Include="Trayectoria.cs" />
     <Compile Include="TrayectoriaParcial.cs" />
@@ -85,14 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -107,32 +107,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\rojo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blanco.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\azul.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\verde.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\water.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\azulM.png" />
     <Content Include="Resources\blancoM.png" />
-    <None Include="Resources\wood.jpg" />
-    <None Include="Resources\waternormals.jpg" />
-    <None Include="Resources\grass.png" />
-    <None Include="Resources\metal.jpg" />
-    <None Include="Resources\plywood.jpg" />
-    <None Include="Resources\rocks.jpg" />
+    <None Include="Resources\Fin.png" />
+    <None Include="Resources\InicioM.png" />
+    <Content Include="Resources\waterM.png" />
+    <None Include="Resources\water.jpg" />
+    <None Include="Resources\FinM.png" />
+    <None Include="Resources\Inicio.png" />
+    <None Include="Resources\rock3.png" />
+    <None Include="Resources\rock4.png" />
+    <None Include="Resources\rock5.png" />
+    <None Include="Resources\rock3M.png" />
+    <None Include="Resources\rock4M.png" />
     <Content Include="Resources\rojoM.png" />
     <Content Include="Resources\verdeM.png" />
-    <None Include="Resources\waterM.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
