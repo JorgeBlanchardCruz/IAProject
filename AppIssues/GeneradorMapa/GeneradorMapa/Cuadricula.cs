@@ -30,18 +30,18 @@ namespace GeneradorMapa
                     if (i == 0 && j == 1)
                         Celdas_[i, j] = new Celda(i, j, 2, parent_);
                     else if (a - 1 == i && j == b - 2)
-                        Celdas_[i, j] = new Celda(i, j, 1, parent_);
+                        Celdas_[i, j] = new Celda(i, j, 4, parent_);
                     else if (i == 0 || i == a - 1)
-                        Celdas_[i, j] = new Celda(i, j, 4, parent_);
+                        Celdas_[i, j] = new Celda(i, j, 1, parent_);
                     else if (j == 0 || j == b - 1)
-                        Celdas_[i, j] = new Celda(i, j, 4, parent_);
+                        Celdas_[i, j] = new Celda(i, j, 1, parent_);
 
                     else if ((obs < c) && (a > 2) && (b > 2 ))
                     {
                         if ((al.Next(100) / (float)100) <= (float)((float)c / ((float)(a - 2) * (float)(b - 2))))
                         {
 
-                            Celdas_[i, j] = new Celda(i, j, 4, parent_);
+                            Celdas_[i, j] = new Celda(i, j, 3, parent_);
                             obs++;
 
                         }

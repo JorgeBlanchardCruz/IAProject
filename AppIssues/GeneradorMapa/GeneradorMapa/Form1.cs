@@ -98,7 +98,7 @@ namespace GeneradorMapa
             {
                 for (int j = 0; j < tab_.get_columns(); j++)
                 {
-                    if (tab_.get_Celda(i, j).get_index() == 1)
+                    if (tab_.get_Celda(i, j).get_index() == 4)
                     {
                         if (!inicio)
                         {
@@ -126,7 +126,7 @@ namespace GeneradorMapa
             {
                 for (int j = 0; j < tab_.get_columns(); j++)
                 {
-                    if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 1)
+                    if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 4)
                     {
                         texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
 
@@ -140,7 +140,7 @@ namespace GeneradorMapa
             if (ok)
             {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
 
-                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\Users\Sabato\mapa.map"))
+                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\Users\Sabato\mapa2.map"))
                 {
                     texto.ForEach(delegate(string ln)
                     {
@@ -174,10 +174,10 @@ namespace GeneradorMapa
             
             switch (selected_)
             {
-                case 1: this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 4: this.pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
                 case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
+                case 1: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
                 default: break;
             }
             selected_ = 0;
@@ -190,19 +190,19 @@ namespace GeneradorMapa
                 case 0: pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
                 case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
+                case 1: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
-            selected_ = 1;
+            selected_ = 4;
         }
         private void pic3_Click(object sender, EventArgs e)
         {
             this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.FinM;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 4: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
                 case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
+                case 1: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
             selected_ = 2;
         }
@@ -211,10 +211,10 @@ namespace GeneradorMapa
             this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.waterM;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 4: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
                 case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
-                case 4: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
+                case 1: this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
             }
             selected_ = 3;
         }
@@ -223,12 +223,12 @@ namespace GeneradorMapa
             this.pictureBox5.Image = global::GeneradorMapa.Properties.Resources.rock4M;
             switch (selected_)
             {
-                case 1: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+                case 4: pictureBox2.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
                 case 2: this.pictureBox3.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                 case 3: this.pictureBox4.Image = global::GeneradorMapa.Properties.Resources.water; break;
                 case 0: this.pictureBox1.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
             }
-            selected_ = 4;
+            selected_ = 1;
         }
     }
 }

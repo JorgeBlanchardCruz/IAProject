@@ -35,10 +35,10 @@ namespace GeneradorMapa
            switch (indx_)
            {
                case 0: this.Image = global::GeneradorMapa.Properties.Resources.rock3; break;
-               case 1: this.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
+               case 4: this.Image = global::GeneradorMapa.Properties.Resources.Inicio; break;
                case 2: this.Image = global::GeneradorMapa.Properties.Resources.Fin; break;
                case 3: this.Image = global::GeneradorMapa.Properties.Resources.water; break;
-               case 4: this.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
+               case 1: this.Image = global::GeneradorMapa.Properties.Resources.rock4; break;
            }
        }
     }
