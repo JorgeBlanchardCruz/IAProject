@@ -56,9 +56,10 @@ namespace GeneradorMapa
                     {
                         A_.Add(i);
                     }
-                }
-                }
+                } 
+           }
 
+            robot_.get_trayectoria().set_trayectoria(aux.get_recorrido());
 
         }
         void incluir_cerrada(TrayectoriaParcial t)
@@ -81,6 +82,10 @@ namespace GeneradorMapa
                 }
             }  
         }
+        float funcion_estimadora(Posicion a) {
+            Posicion aux = robot_.get_meta();
+            return (Math.Abs(aux.x - a.x) + Math.Abs(aux.y - a.y));
+        }
         void ramificar(TrayectoriaParcial t)
         {
             List<TrayectoriaParcial> nuevas = new List<TrayectoriaParcial>();
@@ -94,21 +99,26 @@ namespace GeneradorMapa
             {
                 nuevas.Add(new TrayectoriaParcial(t));
                 nuevas[nuevas.Count - 1].append(toNodo(robot_.get_pos()) - 1, "N");
+                //Funciona solo porque el coste de trancitar entre nodos es constante.
+                nuevas[nuevas.Count - 1].set_coste((t.get_recorrido().Length - 1) + funcion_estimadora(new Posicion (robot_.get_pos().x, robot_.get_pos().y - 1)) + 1);
             }
             if (robot_.get_sensores()[(int)Direcciones.SUR] == 0)
             {
                 nuevas.Add(new TrayectoriaParcial(t));
                 nuevas[nuevas.Count - 1].append(toNodo(robot_.get_pos()) + 1, "S");
+                nuevas[nuevas.Count - 1].set_coste((t.get_recorrido().Length - 1) + funcion_estimadora(new Posicion(robot_.get_pos().x, robot_.get_pos().y + 1)) + 1);
             }
             if (robot_.get_sensores()[(int)Direcciones.ESTE] == 0)
             {
                 nuevas.Add(new TrayectoriaParcial(t)); 
                 nuevas[nuevas.Count - 1].append(toNodo(robot_.get_pos()) + robot_.get_parent().get_tab().get_columns(), "E");
+                nuevas[nuevas.Count - 1].set_coste((t.get_recorrido().Length - 1) + funcion_estimadora(new Posicion(robot_.get_pos().x + 1, robot_.get_pos().y)) + 1);
             }
             if (robot_.get_sensores()[(int)Direcciones.OESTE] == 0)
             {
                 nuevas.Add(new TrayectoriaParcial(t));
-                nuevas[nuevas.Count - 1].append(toNodo(robot_.get_pos()) - robot_.get_parent().get_tab().get_columns(), "O");
+                nuevas[nuevas.Count - 1].append(toNodo(robot_.get_pos()) - robot_.get_parent().get_tab().get_columns(), "O"); 
+                nuevas[nuevas.Count - 1].set_coste((t.get_recorrido().Length - 1) + funcion_estimadora(new Posicion(robot_.get_pos().x - 1, robot_.get_pos().y)) + 1);
             }
 
             nuevas.ForEach(delegate(TrayectoriaParcial aux)

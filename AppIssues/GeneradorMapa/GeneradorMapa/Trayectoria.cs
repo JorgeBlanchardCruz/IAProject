@@ -64,6 +64,19 @@ namespace GeneradorMapa
         }
 
         public string get_trayectoria() { return trayectoria_; }
-
+        public void set_trayectoria(string t)
+        {
+            for (int i = 0; i < t.Length; i++)
+            {
+                switch (t[i])
+                {
+                    case 'N': move_Norte(); break;
+                    case 'S': move_Sur(); break;
+                    case 'E': move_Este(); break;
+                    case 'O': move_Oeste(); break;
+                    default: break;
+                }
+            }
+        }
     }
 }

@@ -120,6 +120,8 @@ namespace GeneradorMapa
                     }
                 }
             }
+            generar_recorrido();
+            texto.Add(robot_.get_trayectoria().get_trayectoria());
             for (int i = 0; i < tab_.get_rows(); i++)
             {
                 for (int j = 0; j < tab_.get_columns(); j++)
@@ -133,8 +135,7 @@ namespace GeneradorMapa
 
             }
 
-            generar_recorrido();
-            texto.Add(robot_.get_trayectoria().get_trayectoria());
+           
 
             if (ok)
             {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
