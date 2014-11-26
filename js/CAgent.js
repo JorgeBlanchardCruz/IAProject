@@ -31,12 +31,12 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         }
 
         this.get_CurrentMove = function () {
+            temp_path += this._indx;
             return this._path[this._indx];
         }
 
         this.play = function () {
             this._begin = true;
-            _movement = 'stop';
         }
 
         this.stop = function () {
@@ -72,6 +72,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     
     //temp variable
     var obj_position;
+    var obj_path;
+    var temp_path = '';
 
     //INITIALIZE
     init();
@@ -87,7 +89,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     };
 
     function init() {
-        obj_position = document.getElementById('camera_position');
+        obj_position = document.getElementById('info1');
+        obj_path     = document.getElementById('info2');
         Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
 
         animate();
@@ -103,6 +106,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                     object.scale.set(scalex, scaley, scalez);
                     object.castShadow = true;
                     object.receiveShadow = true;
+                    object.name = "agent";
 
                     object.rotation.z = -Math.PI / 2;
                     //object.rotation.y = Math.PI / 2;
@@ -164,19 +168,19 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
         Swing();
         
-        obj_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();
+        obj_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();       
     }
 
     function BlockbyBlock() {
-        if (_Path.block < 1) {
+        if (_Path._block < 1) {
             _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
-            _Path.block += _speed;
+            _Path._block += _speed;
         }
         else {      
             _movement = 'stop';
             _Visualobj.translateZ(0);
 
-            _Path.block = 0;
+            _Path._block = 0;
             _Path.add_indx(Move);
         }
     }

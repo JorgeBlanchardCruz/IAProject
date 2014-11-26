@@ -435,6 +435,18 @@ var C3DWorld = function (Antialias, WaterScene) {
         }
     }
 
+    function Clear_Cave() {
+        for (var i = 0; i < _scene.children.length; i++) {
+            var object = _scene.children[i];
+            if ((object.name == _TypeBlock[0]) ||
+                (object.name == _TypeBlock[1]) ||
+                (object.name == _TypeBlock[2]) ||
+                (object.name == "agent")) {
+                _scene.remove(object);
+                i--;
+            }
+        }
+    }
 
     //METHODS    
         //-------------------------------------------------------
@@ -483,7 +495,8 @@ var C3DWorld = function (Antialias, WaterScene) {
             _Agentx = Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2));
 
             //recoge la trayectoria del agente
-            _Path = content[3].substring(0, content.length - 2);
+            //_Path = content[3].substring(0, content.length - 2);
+            _Path = content[3];
          
             if (procetype.substring(0, 3) == 'way')
                 Read_FileMap_Way(content);
@@ -494,6 +507,10 @@ var C3DWorld = function (Antialias, WaterScene) {
         };
 
         reader.readAsText(file);
+    };
+
+    this.Clear_Cave = function () {
+        Clear_Cave();
     };
 
     this.Create_ambientLight = function (color, x, y, z) {

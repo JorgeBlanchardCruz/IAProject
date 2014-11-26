@@ -49,6 +49,7 @@ function Add_Events() {
     document.onkeypress = AgentMove;
 
     file_input.onchange = function () {
+        MapCAVE.Clear_Cave();
         MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership);
     };
 }
