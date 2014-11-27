@@ -89,6 +89,15 @@ var C3DWorld = function (Antialias, WaterScene) {
         ];
     }
 
+    function destructor() {
+        _scene.Clear();
+        _renderer.Clear();
+
+        //_container = null;
+        //_scene = _renderer = _camera = _controls = null;
+        //_objLoad = _water = _directionalLight = null;
+    }
+
     function animate() {
         requestAnimationFrame(animate);
 
@@ -511,6 +520,10 @@ var C3DWorld = function (Antialias, WaterScene) {
 
     this.Clear_Cave = function () {
         Clear_Cave();
+    };
+
+    this.destructor = function () {
+        destructor();
     };
 
     this.Create_ambientLight = function (color, x, y, z) {

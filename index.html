@@ -1,70 +1,119 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-    <head>
-        <title>Cartographers Agents v1.0.0</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<head>
 
-        <link href="css/style.css" rel="stylesheet" type="text/css">
+    <title>Cartographers Agents</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="Jorge O. Blanchard Cruz, España, S/C Tenerife" name="author">
 
-		<!-- METRO -->
-		<script src="js/libraries/jQuery/jquery-2.1.1.min.js"></script>	
-		<script src="js/libraries/jQuery/jquery.widget.min.js"></script>
-		<script src="js/libraries/Metro-UI/js/metro-input-control.js"></script>
-		
-		<link href="js/libraries/Metro-UI/min/metro-bootstrap.min.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="js/libraries/Metro-UI/min/iconFont.min.css" type="text/css" media="screen" charset="utf-8"/>
-		<!-- <script src="js/libraries/Metro-UI/min/metro.min.js"></script> --->
-		
-        <script src="js/main.js"></script>
-        <script src="js/C3DWorld.js"></script>
-        <script src="js/CMothership.js"></script>
-        <script src="js/CAgent.js"></script>        
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/metro-bootstrap.css" rel="stylesheet">
+    <link href="css/metro-bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/iconFont.css" rel="stylesheet">
+    <link href="css/docs.css" rel="stylesheet">
 
-        <script src="js/libraries/three.js"></script>
-        <script src="js/libraries/DDSLoader.js"></script>
-        <script src="js/libraries/OBJLoader.js"></script>
-        <script src="js/libraries/MTLLoader.js"></script>
-        <script src="js/libraries/OBJMTLLoader.js"></script>
-        <script src="js/libraries/Detector.js"></script>
-        <script src="js/libraries/stats.min.js"></script>
-        <script src="js/libraries/TrackballControls.js"></script>
-        <script src="js/libraries/Mirror.js"></script>
-        <script src="js/libraries/WaterShader.js"></script>   
-        
-        
 
-    
-    </head>
-    <body class="metro">
-	
-	<nav class="navigation-bar">
-		<nav class="navigation-bar-content">
-			<a href="/" class="element"><span class="icon-home"></span>&nbsp;HOME</a>
-			<span class="element-divider"></span>
-			<a class="pull-menu" href="#"></a>
-			<ul class="element-menu">
+     <!-- jquery -->
+    <script src="js/jquery/jquery.min.js"></script>
+    <script src="js/jquery/jquery.widget.min.js"></script>
+    <script src="js/jquery/jquery.mousewheel.js"></script>
 
-			  <li><a class="brand"> Cartographers Agents </a></li>
 
-			  <span class="element-divider"></span>
+    <!-- Metro UI css 2.0 -->
+    <script src="js/metro.min.js"></script>
 
-			   <li><a href="https://github.com/alu0100536591/Cartographers-Agents-project" title="Repo" class="element" target="_blank">Repo en Github</a></li>   
 
-			</ul>
-		</nav>
-	</nav>
-		
-		<div class="input-control file">
-			<!--<input type="file" name="file_input" id="file_input">-->
-			<button class="btn-file"></button>
-		</div>
+    <!-- Three.js -->
+    <script src="js/threejs/three.js"></script>
+    <script src="js/threejs/DDSLoader.js"></script>
+    <script src="js/threejs/OBJLoader.js"></script>
+    <script src="js/threejs/MTLLoader.js"></script>
+    <script src="js/threejs/OBJMTLLoader.js"></script>
+    <script src="js/threejs/Detector.js"></script>
+    <script src="js/threejs/stats.min.js"></script>
+    <script src="js/threejs/TrackballControls.js"></script>
+    <script src="js/threejs/Mirror.js"></script>
+    <script src="js/threejs/WaterShader.js"></script>
 
-        <div id="info">
-            <p> <input type="file" name="file_input" id="file_input"> </p>
-            <p> <output id="info1"></output> </p>
-            <p> <output id="info2"></output> </p> 
-        </div>
 
-    </body>
+    <!-- Local JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/C3DWorld.js"></script>
+    <script src="js/CMothership.js"></script>
+    <script src="js/CAgent.js"></script>
+
+
+</head>
+<body class="metro">
+
+    <nav class="navigation-bar dark">
+        <nav class="navigation-bar-content">
+
+  
+            <a href="/" class="element"><span class="icon-cube-2"></span>&nbsp;&nbsp;&nbsp;AI Technologies</a>
+
+            <span class="element-divider"></span>
+
+            <a href="https://github.com/alu0100536591/Cartographers-Agents-project" title="Repo" class="element" target="_blank"> <span class="icon-github"></span>&nbsp;&nbsp; GitHub Repo </a>
+
+            <span class="element-divider"></span>
+
+            <div class="element place-right">
+                <a class="dropdown-toggle" href="#">
+                    <span class="icon-cog"></span>
+                </a>                
+                <ul class="dropdown-menu place-right" data-role="dropdown">       
+                    <li class="menu-title">Fichero de mapa </li>
+                    <li>
+                        <div class="input-control file">
+                            <input type="file" id="btnfile_input" />
+                            <button class="btn-file"></button>
+                        </div> 
+                    </li>
+                    
+                    <li class="menu-title">Acciones</li>
+                    <li><a id="btnFullScreen"> <span class="icon-fullscreen-alt"></span>&nbsp;&nbsp;&nbsp;FullScreen</a></li>
+                    <li><a id="btnReset"> <span class="icon-spin"></span>&nbsp;&nbsp;&nbsp;Reset</a></li>
+                    
+                    <li class="menu-title">Config</li>
+                    <li>
+                        <div class="input-control checkbox">
+                            <label>
+                                <input type="checkbox" id="chbWaterScene" />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="check"></span>
+                                &nbsp;WaterScene
+                            </label>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="input-control checkbox">
+                            <label>
+                                <input type="checkbox" id="chbAntialiasing" />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="check"></span>
+                                &nbsp;Antialiasing
+                            </label>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+            
+            <span class="element-divider place-right"></span>
+
+            <a class="element place-right" id="btnPlay"><span class="icon-play"></span></a>
+
+            <a class="element place-right" id="info1"></a>
+
+        </nav>
+    </nav>
+
+    <!--<div id="info">    
+        <p> <output id="info1"></output> </p>
+        <p> <output id="info2"></output> </p>
+    </div>-->
+
+</body>
 </html>
