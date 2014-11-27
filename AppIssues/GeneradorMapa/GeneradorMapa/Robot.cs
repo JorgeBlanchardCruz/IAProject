@@ -33,7 +33,7 @@ namespace GeneradorMapa
            parent_ = p;
            trayectoria_ = new Trayectoria();
            actualizarSensores();
-           metodo_ = new DFS(this);
+           metodo_ = new A_Star(this);
        }
        
        public void actualizarSensores()
@@ -108,6 +108,7 @@ namespace GeneradorMapa
 
        public Method get_method() { return metodo_; }
        public Posicion get_meta() { return meta_; }
+       public void set_meta(Posicion p) { meta_ = p; }
 
     }
 }

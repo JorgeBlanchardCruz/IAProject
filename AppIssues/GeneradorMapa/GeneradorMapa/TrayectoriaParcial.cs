@@ -38,5 +38,6 @@ namespace GeneradorMapa
        }
        public string get_recorrido() { return recorrido_; }
        public List<int> get_nodos() { return nodos_; }
+   
     }
 }

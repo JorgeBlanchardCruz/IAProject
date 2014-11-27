@@ -89,7 +89,7 @@ namespace GeneradorMapa
             List<string> texto = new List<string>();
             bool inicio = false;
             bool final = false;
-
+            Posicion meta = new Posicion (0,0);
             texto.Add("blocks");
             texto.Add(cad[1] + "x" + cad[0]);
 
@@ -114,12 +114,17 @@ namespace GeneradorMapa
                     else if (tab_.get_Celda(i, j).get_index() == 2)
                     {
                         if (!final)
+                        {
                             final = true;
+                            meta = new Posicion(i, j);
+                        }
                         else
                             ok = false;
                     }
                 }
             }
+
+            robot_.set_meta(meta);
             generar_recorrido();
             texto.Add(robot_.get_trayectoria().get_trayectoria());
             for (int i = 0; i < tab_.get_rows(); i++)
