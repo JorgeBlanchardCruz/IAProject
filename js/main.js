@@ -15,17 +15,22 @@ var MotherSHIP;
 
 var MapParams;
 
-var btnfile_input;
-var btnFullScreen;
-var btnReset;
-var chbWaterScene;
-var chbAntialiasing;
+var WaterScene = false, Antialiasing = false;
 
 
-var WaterScene = false, Antialiasing = false; 
+//UI objects
+    var btnfile_input;
+    var btnFullScreen;
+    var btnReset;
+    var chbWaterScene;
+    var chbAntialiasing;
+    var btnPlay;
+    var btnPause;
+    var btnRev;
+//--------------------
+
 
 function main() {
-
     Load3DUI();
     
     set_HTMLObjects();
@@ -36,36 +41,35 @@ function main() {
 
 //PROCEDURES
 function set_HTMLObjects() {
- 
+    btnPlay = document.getElementById('btnPlay');
+    btnPause = document.getElementById('btnPause');
+    btnRev = document.getElementById('btnRev');
+
     btnfile_input = document.getElementById('btnfile_input');
     btnFullScreen = document.getElementById('btnFullScreen');
     btnReset = document.getElementById('btnReset');
     chbWaterScene = document.getElementById('chbWaterScene');
-    chbAntialiasing = document.getElementById('chbAntialiasing');
-
-    //camera_position = document.getElementById('camera_position');
-    //camera_rotation = document.getElementById('camera_rotation');
-
+    chbAntialiasing = document.getElementById('chbAntialiasing');  
 }
 
 function Add_Events() {
 
+    document.onkeypress = document_onkeypress;
     window.addEventListener('resize', onWindowResize, false);
+
+    btnPlay.addEventListener('click', Play);
+    btnPause.addEventListener('click', Pause);
+    btnRev.addEventListener('click', Rev);
+
+    btnfile_input.addEventListener('change', btnfile_input_onchange);
     btnFullScreen.addEventListener('click', toggleFullScreen, false);
     btnReset.addEventListener('click', Load3DUI, false);
     chbWaterScene.addEventListener('change', onConfigChange);
     chbAntialiasing.addEventListener('change', onConfigChange);
-
-    document.onkeypress = AgentMove;
-
-    btnfile_input.onchange = function () {
-        MapCAVE.Clear_Cave();
-        MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership);
-    };
 }
 
 function Load3DUI() {
-    if (MapCAVE != null) MapCAVE.destructor();
+    if (MapCAVE != null) MapCAVE.Clear_all();
 
     MapCAVE = new C3DWorld(Antialiasing, WaterScene);
     MapParams = MapCAVE.get_Params();
@@ -101,9 +105,22 @@ function toggleFullScreen() {
     }
 }
 
-function AgentMove(event) {
+function AgentMove(key) {
     if (MotherSHIP != null)
-        MotherSHIP.Agent().Move(event.key);
+        MotherSHIP.Agent().Move(key);
+}
+
+function Play() {
+    AgentMove('i');
+}
+
+function Pause() {
+    AgentMove('stop');
+}
+
+function Rev() {
+    if (MotherSHIP != null)
+        MotherSHIP.Agent().Rev();
 }
 
 
@@ -115,11 +132,22 @@ function onWindowResize() {
     MapParams.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function document_onkeypress(event) {
+    AgentMove(event.key);
+}
 
 function onConfigChange() {
     WaterScene = chbWaterScene.checked;
     Antialiasing = chbAntialiasing.checked;
 }
+
+function btnfile_input_onchange() {
+    MapCAVE.Clear_Cave();
+    MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership);
+}
+
+
+
 
 
 

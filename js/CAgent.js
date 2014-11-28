@@ -371,11 +371,20 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
         Params.renderer.render(Params.scene, Params.camera);
     }
 
+    function Rev() {
+        _Path.reset();
+        _Visualobj.position.set(Params.posAgent[1], 0, Params.posAgent[0]);
+    }
+
     //METHODS
     this.Move = function (movement) { Move(movement); };
 
     this.SetPath = function (agentpath) {
         _Path = new path(0, 0, false, agentpath);
+    }
+
+    this.Rev = function () {
+        Rev();
     }
 
 };

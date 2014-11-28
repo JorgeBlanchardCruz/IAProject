@@ -145,7 +145,7 @@ namespace GeneradorMapa
             if (ok)
             {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
 
-                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\Users\Sabato\mapa2.map"))
+                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\mapa2.map"))
                 {
                     texto.ForEach(delegate(string ln)
                     {

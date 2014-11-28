@@ -46,6 +46,7 @@ var C3DWorld = function (Antialias, WaterScene) {
     //PROCEDURES
     function init() {
         _container = document.createElement('div');
+        _container.id = "3DCanvas";
         document.body.appendChild(_container);
 
         _renderer = new THREE.WebGLRenderer({ antialias: Antialias }); //inicializar Three.js
@@ -53,6 +54,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         _renderer.shadowMapType = THREE.PCFSoftShadowMap;
         _renderer.setClearColor(COLOR_BACKGROUNDSCENE, 1);
 
+        _renderer.domElement.id = "RenderdomElement";
         document.body.appendChild(_renderer.domElement);
 
         _scene = new THREE.Scene(); //crear escena
@@ -60,9 +62,9 @@ var C3DWorld = function (Antialias, WaterScene) {
         _scene.position.set(0, 0, 0);
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
-        _camera.position.set(0, 50, -25);
+        _camera.position.set(50, 100, 50);
         //_camera.position.set(-25, 50, 0);
-        //_camera.rotation.set(0, 0, 0);
+        //_camera.rotation.set(25, 25, 0);
         _camera.lookAt(_scene.position);
 
         _controls = Create_TrackballControls();
@@ -82,20 +84,17 @@ var C3DWorld = function (Antialias, WaterScene) {
         //Poned colores y texturas a los blockes asi como el tipo de bloque.
         //(Solo 'obstacle' funcionará para las colisiones)
         _Blocks = [
-            new Block('suelo', _TypeBlock[2], '', '#C2A159', 0.25),
-            new Block('pared', _TypeBlock[0], '', '#8C7518', 1),
-            new Block('escombros', _TypeBlock[1], '', '#DFE36B', 1),
-            new Block('pozo', _TypeBlock[0], '', '#6D8EC7', 0.1)
+            new Block('suelo', _TypeBlock[2], 'meshes/rock3.jpg', '#C2A159', 0.25),
+            new Block('pared', _TypeBlock[0], 'meshes/rock.jpg', '#8C7518', 1),
+            new Block('escombros', _TypeBlock[1], 'meshes/plywood.jpg', '#DFE36B', 1),
+            new Block('pozo', _TypeBlock[0], 'meshes/water.jpg', '#6D8EC7', 0.1)
         ];
     }
 
-    function destructor() {
-        _scene.Clear();
-        _renderer.Clear();
-
-        //_container = null;
-        //_scene = _renderer = _camera = _controls = null;
-        //_objLoad = _water = _directionalLight = null;
+    function Clear_all() {
+        Clear_Cave();
+        document.getElementById(_container.id).remove();
+        document.getElementById(_renderer.domElement.id).remove();
     }
 
     function animate() {
@@ -437,7 +436,9 @@ var C3DWorld = function (Antialias, WaterScene) {
             var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
             var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
 
-            Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+            var y = (_Blocks[type]._height < 1 ? -0.25 - _Blocks[type]._height : 0);
+
+            Create_cubeBlock(_Blocks[type], 1, 1, x, y, z);
 
             //modifica el elemento del array de mapa correspondiente
             MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
@@ -522,8 +523,8 @@ var C3DWorld = function (Antialias, WaterScene) {
         Clear_Cave();
     };
 
-    this.destructor = function () {
-        destructor();
+    this.Clear_all = function () {
+        Clear_all();
     };
 
     this.Create_ambientLight = function (color, x, y, z) {

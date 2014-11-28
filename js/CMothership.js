@@ -15,7 +15,7 @@ var CMothership = function (Params) {
     //PROCEDURES
     function init() {
         _Agent = new CAgent(Params, 0.05, true, Params.posAgent[0], Params.posAgent[1]);
-        _Agent.SetPath(Params.path); //esto es una ruta de prueba
+        _Agent.SetPath(Params.path); //envio de la ruta
     }
 
     //METHODS

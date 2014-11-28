@@ -47,10 +47,9 @@
 </head>
 <body class="metro">
 
-    <nav class="navigation-bar dark">
+    <nav class="navigation-bar dark fixed-top">
         <nav class="navigation-bar-content">
 
-  
             <a href="/" class="element"><span class="icon-cube-2"></span>&nbsp;&nbsp;&nbsp;AI Technologies</a>
 
             <span class="element-divider"></span>
@@ -60,22 +59,23 @@
             <span class="element-divider"></span>
 
             <div class="element place-right">
+
                 <a class="dropdown-toggle" href="#">
                     <span class="icon-cog"></span>
-                </a>                
-                <ul class="dropdown-menu place-right" data-role="dropdown">       
+                </a>
+                <ul class="dropdown-menu place-right" data-role="dropdown">
                     <li class="menu-title">Fichero de mapa </li>
                     <li>
                         <div class="input-control file">
                             <input type="file" id="btnfile_input" />
                             <button class="btn-file"></button>
-                        </div> 
+                        </div>
                     </li>
-                    
+
                     <li class="menu-title">Acciones</li>
                     <li><a id="btnFullScreen"> <span class="icon-fullscreen-alt"></span>&nbsp;&nbsp;&nbsp;FullScreen</a></li>
                     <li><a id="btnReset"> <span class="icon-spin"></span>&nbsp;&nbsp;&nbsp;Reset</a></li>
-                    
+
                     <li class="menu-title">Config</li>
                     <li>
                         <div class="input-control checkbox">
@@ -86,7 +86,6 @@
                             </label>
                         </div>
                     </li>
-
                     <li>
                         <div class="input-control checkbox">
                             <label>
@@ -96,16 +95,26 @@
                             </label>
                         </div>
                     </li>
-
                 </ul>
             </div>
 
-            
             <span class="element-divider place-right"></span>
 
-            <a class="element place-right" id="btnPlay"><span class="icon-play"></span></a>
+            <a href="#" class="element place-right" id="btnRev"><span class="icon-first"></span></a>
 
-            <a class="element place-right" id="info1"></a>
+            <span class="element-divider place-right"></span>
+
+            <a href="#" class="element place-right" id="btnPause"><span class="icon-pause"></span></a>
+
+            <span class="element-divider place-right"></span>
+
+            <a href="#" class="element place-right" id="btnPlay"><span class="icon-play"></span></a>
+
+            <span class="element-divider place-right"></span>
+
+            <a class="element place-right" id="info1"> info</a>
+
+            <span class="element-divider place-right"></span>
 
         </nav>
     </nav>
