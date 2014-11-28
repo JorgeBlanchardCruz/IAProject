@@ -14,7 +14,12 @@ var C3DWorld = function (Antialias, OceanScene) {
         this._pathtexture = pathtexture; //si utilizamos texturas el rendimiento es mucho menor
         this._color = color;
         this._height = height;
-    }
+    };
+
+    function position(z, x) {
+        this.z = z;
+        this.x = x;
+    };
 
     //ATTRIBUTES
     const SEP_COORD = ',';
@@ -29,10 +34,11 @@ var C3DWorld = function (Antialias, OceanScene) {
         //----------------------
 
         //atributos del mapa
-        var MAPMatrix; //estoy hay que mejorarlo, lo he dejado así de forma provisional
+        var _MAPMatrix;
         var _MapWidth = 0, _MapHeight = 0;
         var _Path;
-        var _Agentz, _Agentx;
+        var _NodeSTART;
+        var _NodeOBJETIVE;
         //---------------------
 
     var _TypeBlock;
@@ -63,7 +69,6 @@ var C3DWorld = function (Antialias, OceanScene) {
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
         _camera.position.set(50, 100, 50);
-        //_camera.position.set(-25, 50, 0);
         //_camera.rotation.set(25, 25, 0);
         //_camera.lookAt(_scene.position);
 
@@ -410,11 +415,11 @@ var C3DWorld = function (Antialias, OceanScene) {
     function Read_FileMap_Way(content, Textures) {
 
         //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
-        MAPMatrix = new Array();
+        _MAPMatrix = new Array();
         for (var x = 0; x < _MapWidth ; x++)
             for (var z = 0; z < _MapHeight; z++) {
                 Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z, Textures);
-                MAPMatrix.push([z, x, _TypeBlock[0]]);
+                _MAPMatrix.push([z, x, _TypeBlock[0]]);
             }
 
         //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
@@ -430,16 +435,16 @@ var C3DWorld = function (Antialias, OceanScene) {
             if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[_MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
         }
     }
 
     function Read_FileMap_Blocks(content, Textures) {
         //Creamos  la matriz del mapa
-        MAPMatrix = new Array();
+        _MAPMatrix = new Array();
         for (var x = 0; x < _MapWidth ; x++)
             for (var z = 0; z < _MapHeight; z++)
-                MAPMatrix.push([z, x, -1]);
+                _MAPMatrix.push([z, x, -1]);
 
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
         for (var i = LIMAP_CONTENT; i < content.length; i++) {
@@ -453,7 +458,7 @@ var C3DWorld = function (Antialias, OceanScene) {
             Create_cubeBlock(_Blocks[type], 1, 1, x, y, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[_MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
         }
     }
 
@@ -471,9 +476,10 @@ var C3DWorld = function (Antialias, OceanScene) {
     }
 
     //METHODS    
-        //-------------------------------------------------------
+        
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock, path: _Path, posAgent: [_Agentz, _Agentx] }; }
+    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock, path: _Path, MAPMatrix: _MAPMatrix, NodeSTART: _NodeSTART, nodeObjetive: null }; }
+        //-------------------------------------------------------
 
         //setters
 
@@ -512,12 +518,10 @@ var C3DWorld = function (Antialias, OceanScene) {
             width = Number(width) + 1; height = Number(height) + 1;
             Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1, Textures);
 
-            //recoge la posición del agente
-            _Agentz = Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD)));
-            _Agentx = Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2));
-
+            //recoge la posición del agente (z,x)
+            _NodeSTART = new position(Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD))), Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2)));
+            
             //recoge la trayectoria del agente
-            //_Path = content[3].substring(0, content.length - 2);
             _Path = content[3];
          
             if (procetype.substring(0, 3) == 'way')

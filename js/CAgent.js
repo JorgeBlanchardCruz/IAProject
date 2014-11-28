@@ -5,7 +5,7 @@
  */
 
 //la dimensión 'y' ha sido bloqueada
-var CAgent = function (Params, speed, ActiveCollisions, z, x) {
+var CAgent = function (Params, speed, ActiveCollisions) {
     "use strict";
 
     //STRUCTURES
@@ -47,7 +47,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
              this._indx = 0;
          }
     }
-
+    
 
     //ATTRIBUTES
     const _MAXSWING = 0.03;
@@ -88,7 +88,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
     function init() {
         obj_position = document.getElementById('info1');
 
-        Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', x, 0, z, 0.08, 0.08, 0.08);
+        Load_objmtl('meshes/WheatleyModel.obj', 'meshes/Ghost.mtl', Params.NodeSTART.x, 0, Params.NodeSTART.z, 0.08, 0.08, 0.08);
 
         animate();
     }
@@ -386,7 +386,50 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
     function Rev() {
         _Path.reset();
-        _Visualobj.position.set(Params.posAgent[1], 0, Params.posAgent[0]);
+        _Visualobj.position.set(Params.NodeSTART.x, 0, Params.NodeSTART.z);
+    }
+
+    function Searchstrategy_Astar() {
+        /*
+        1. Formar una lista de trayectorias parciales, ABIERTA, con una trayectoria inicial
+            que comienza en el nodo raíz. Formar una lista CERRADA, de trayectorias 
+            desechadas mínimas, inicialmente vacía.
+
+        2. Hasta que la lista ABIERTA esté vacía o se encuentre el objetivo, analizar su
+            primera trayectoria: 
+
+                2A.Si la trayectoria termina en el nodo objetivo, se finaliza el bucle.
+
+                2B.Si la primera trayectoria no termina en el nodo objetivo:
+
+                    2B1.Eliminar la primera trayectoria de la lista ABIERTA, incluyendola en la 
+                        lista CERRADA. En el caso de que ya exista una similar, eliminar la de
+                        mayor coste.
+
+                    2B2.Formar nuevas trayectorias a partir de la trayectoria eliminada de ABIERTA 
+                        ramificando el último nodo de la misma.
+
+                    2B3.Añadir las nuevas trayectorias a la lista ABIERTA, si existen.
+
+                    2B4.Ordenar la lista ABIERTA en base al costo total estimado de cada una,
+                        colocando la de mínimo coste al inicio de la lista.
+
+                    2B5. Si dos o más trayectorias de ABIERTA acaban en un nodo común, borrar las 
+                        mismas excepto la que posee mínimo coste entre ellas. Eliminar esta última
+                        también si existe una similar con menor coste en la lista CERRADA. Al 
+                        eliminar trayectorias de ABIERTA deben insertarse en CERRADA salvo que ya
+                        exista allí una similar de menor coste.
+
+        3. Si se alcanza el nodo objetivo, el problema tiene solución y se determina la 
+            trayectoria óptima, en caso contrario no existe solución.
+        */
+
+        Params.MAPMatrix
+
+        var OPEN = null, CLOSE = null;
+
+
+
     }
 
     //METHODS
