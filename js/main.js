@@ -15,7 +15,7 @@ var MotherSHIP;
 
 var MapParams;
 
-var OceanScene = false, Antialiasing = false, Textures = true;
+var OceanScene = false, Antialiasing = true, Textures = false;
 
 
 //UI objects

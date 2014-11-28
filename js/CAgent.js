@@ -106,7 +106,6 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                     object.name = "agent";
 
                     object.rotation.z = -Math.PI / 2;
-                    //object.rotation.y = Math.PI / 2;
 
                     _Visualobj = object;
 
@@ -114,6 +113,18 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
                 });
         }
         catch (err) { console.log(err); }
+    }
+
+    function Create_marker(z, x) {
+        //var light = new THREE.PointLight('#49A32A', 10, 10);
+        //light.position.set(x, 0, z);
+        //Params.scene.add(light);
+
+        var object = new THREE.Mesh(new THREE.SphereGeometry(.15, 50, 50), new THREE.MeshBasicMaterial({ /*transparent: true, opacity: 0.7,*/ color: '#49A32A' }));
+        object.name = "marker";
+        object.position.set(x, 0, z);
+
+        Params.scene.add(object);
     }
 
     function Move(movement) {
@@ -179,6 +190,8 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
             _Path._block = 0;
             _Path.add_indx(Move);
+
+            Create_marker(_Visualobj.position.z, _Visualobj.position.x);
         }
     }
 

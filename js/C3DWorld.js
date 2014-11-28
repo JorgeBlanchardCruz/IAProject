@@ -65,7 +65,7 @@ var C3DWorld = function (Antialias, OceanScene) {
         _camera.position.set(50, 100, 50);
         //_camera.position.set(-25, 50, 0);
         //_camera.rotation.set(25, 25, 0);
-        _camera.lookAt(_scene.position);
+        //_camera.lookAt(_scene.position);
 
         _controls = Create_TrackballControls();
 
@@ -310,6 +310,18 @@ var C3DWorld = function (Antialias, OceanScene) {
         _scene.add(cylinder);
 
         return cylinder;
+    }
+
+    function Create_sphere(radius, widthSegments, heightSegments, color, x, y, z) {
+        var object = new THREE.Mesh(new THREE.SphereGeometry(radius, widthSegments, heightSegments), new THREE.MeshLambertMaterial({ color: color }));
+        object.id = Number('10' + z.toString() + '10' + x.toString());
+        object.position.set(x, y, z);
+        object.castShadow = true;
+        object.receiveShadow = true;
+
+        _scene.add(object);
+
+        return object;
     }
 
     function Load_obj(fileobj, filetexture, x, y, z, scalex, scaley, scalez) {
