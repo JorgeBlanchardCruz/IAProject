@@ -4,7 +4,7 @@
  * 
  */
 
-var C3DWorld = function (Antialias, WaterScene) {
+var C3DWorld = function (Antialias, OceanScene) {
     "use strict";
 
     //STRUCTURES
@@ -73,7 +73,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         Create_directionalLight(0xffffff, 30, 20, -22);
         _directionalLight = Create_directionalLight(0xffffff, -18, 10, 12);
 
-        if (WaterScene) { Create_WaterScene(_directionalLight); }
+        if (OceanScene) { Create_WaterScene(_directionalLight); }
 
         animate();
     }
@@ -265,8 +265,8 @@ var C3DWorld = function (Antialias, WaterScene) {
         return cube;
     }
 
-    function Create_cubeBlock(block, w, l, x, y, z) {
-        if (block._pathtexture != '')
+    function Create_cubeBlock(block, w, l, x, y, z, Textures) {
+        if ((block._pathtexture != '') && (Textures))
             Create_cubeTexture(block, w, l, x, y, z);
         else
             Create_cube(block._height, w, l, block._color, x, y, z, block._type);
@@ -395,13 +395,13 @@ var C3DWorld = function (Antialias, WaterScene) {
         return undefined;
     }
 
-    function Read_FileMap_Way(content) {
+    function Read_FileMap_Way(content, Textures) {
 
         //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
         MAPMatrix = new Array();
         for (var x = 0; x < _MapWidth ; x++)
             for (var z = 0; z < _MapHeight; z++) {
-                Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z);
+                Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z, Textures);
                 MAPMatrix.push([z, x, _TypeBlock[0]]);
             }
 
@@ -415,14 +415,14 @@ var C3DWorld = function (Antialias, WaterScene) {
             var id = Number('10' + Number(z) + '10' + Number(x));
             var selectedObject = _scene.getObjectById(id);
             _scene.remove(selectedObject);
-            if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+            if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
             MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
         }
     }
 
-    function Read_FileMap_Blocks(content) {
+    function Read_FileMap_Blocks(content, Textures) {
         //Creamos  la matriz del mapa
         MAPMatrix = new Array();
         for (var x = 0; x < _MapWidth ; x++)
@@ -438,7 +438,7 @@ var C3DWorld = function (Antialias, WaterScene) {
 
             var y = (_Blocks[type]._height < 1 ? -0.25 - _Blocks[type]._height : 0);
 
-            Create_cubeBlock(_Blocks[type], 1, 1, x, y, z);
+            Create_cubeBlock(_Blocks[type], 1, 1, x, y, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
             MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
@@ -467,7 +467,7 @@ var C3DWorld = function (Antialias, WaterScene) {
 
         //-------------------------------------------------------
  
-    this.Create_CaveofMapfile = function (file, callback) {
+    this.Create_CaveofMapfile = function (file, callback, Textures) {
         /*
 
             El formato del fichero es el siguiente:
@@ -498,7 +498,7 @@ var C3DWorld = function (Antialias, WaterScene) {
 
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1);
+            Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1, Textures);
 
             //recoge la posición del agente
             _Agentz = Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD)));
@@ -509,9 +509,9 @@ var C3DWorld = function (Antialias, WaterScene) {
             _Path = content[3];
          
             if (procetype.substring(0, 3) == 'way')
-                Read_FileMap_Way(content);
+                Read_FileMap_Way(content, Textures);
             else if (procetype.substring(0, 6) == 'blocks')
-                Read_FileMap_Blocks(content);
+                Read_FileMap_Blocks(content, Textures);
 
             callback(); //ejecuta las funciones posteriores a cuando termina la carga del mapa
         };

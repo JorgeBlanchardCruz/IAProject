@@ -165,7 +165,7 @@ var CAgent = function (Params, speed, ActiveCollisions, z, x) {
 
         Swing();
         
-        obj_position.innerHTML = 'Wheatley pos(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString();       
+        obj_position.innerHTML = '<small> Robot(z,x): ' + _Visualobj.position.z.toFixed(2).toString() + ' ; ' + _Visualobj.position.x.toFixed(2).toString() + '</small>';       
     }
 
     function BlockbyBlock() {

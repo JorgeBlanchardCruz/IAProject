@@ -15,15 +15,16 @@ var MotherSHIP;
 
 var MapParams;
 
-var WaterScene = false, Antialiasing = false;
+var OceanScene = false, Antialiasing = false, Textures = true;
 
 
 //UI objects
     var btnfile_input;
     var btnFullScreen;
     var btnReset;
-    var chbWaterScene;
+    var chbOceanScene;
     var chbAntialiasing;
+    var chbTexturas;
     var btnPlay;
     var btnPause;
     var btnRev;
@@ -48,8 +49,13 @@ function set_HTMLObjects() {
     btnfile_input = document.getElementById('btnfile_input');
     btnFullScreen = document.getElementById('btnFullScreen');
     btnReset = document.getElementById('btnReset');
-    chbWaterScene = document.getElementById('chbWaterScene');
-    chbAntialiasing = document.getElementById('chbAntialiasing');  
+    chbOceanScene = document.getElementById('chbOceanScene');
+    chbAntialiasing = document.getElementById('chbAntialiasing');
+    chbTexturas = document.getElementById('chbTexturas');
+
+    chbOceanScene.checked = OceanScene;
+    chbAntialiasing.checked = Antialiasing;
+    chbTexturas.checked = Textures;
 }
 
 function Add_Events() {
@@ -64,14 +70,16 @@ function Add_Events() {
     btnfile_input.addEventListener('change', btnfile_input_onchange);
     btnFullScreen.addEventListener('click', toggleFullScreen, false);
     btnReset.addEventListener('click', Load3DUI, false);
-    chbWaterScene.addEventListener('change', onConfigChange);
+    chbOceanScene.addEventListener('change', onConfigChange);
     chbAntialiasing.addEventListener('change', onConfigChange);
+    chbTexturas.addEventListener('change', onConfigChange);
+
 }
 
 function Load3DUI() {
     if (MapCAVE != null) MapCAVE.Clear_all();
 
-    MapCAVE = new C3DWorld(Antialiasing, WaterScene);
+    MapCAVE = new C3DWorld(Antialiasing, OceanScene);
     MapParams = MapCAVE.get_Params();
 }
 
@@ -137,13 +145,14 @@ function document_onkeypress(event) {
 }
 
 function onConfigChange() {
-    WaterScene = chbWaterScene.checked;
+    OceanScene = chbOceanScene.checked;
     Antialiasing = chbAntialiasing.checked;
+    Textures = chbTexturas.checked;
 }
 
 function btnfile_input_onchange() {
     MapCAVE.Clear_Cave();
-    MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership);
+    MapCAVE.Create_CaveofMapfile(this.files[0], Create_Mothership, Textures);
 }
 
 
