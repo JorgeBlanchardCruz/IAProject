@@ -27,32 +27,32 @@ function position(z, x) {
             return null;
 
         if (this.z == poscompare.z){
-            if (prevpos == 0){
+            if (prevpos == 0  || prevpos == 270){
                 if (poscompare.x > this.x)
-                    return 270;
-                else if (poscompare.x < this.x)
                     return 90;
+                else if (poscompare.x < this.x)
+                    return 270;
             }
-            else if (prevpos == 180) {
+        if (prevpos == 180 || prevpos == 90) {
                 if (poscompare.x > this.x)
-                    return 270;
-                else if (poscompare.x < this.x)
                     return 90;
+                else if (poscompare.x < this.x)
+                    return 270;
             }
         }
 
         if (this.x == poscompare.x){
-            if (prevpos == 270){
+            if (prevpos == 270 || prevpos == 0) {
                 if (poscompare.z > this.z)
-                    return 180;
+                    return 0;  //revisado
                 else if (poscompare.z < this.z)
-                    return 0;
+                    return 180;
             }
-            else if (prevpos == 90) {
+            if (prevpos == 90 || prevpos == 180) {
                 if (poscompare.z > this.z)
-                    return 180;
-                else if (poscompare.z < this.z)
                     return 0;
+                else if (poscompare.z < this.z)
+                    return 180;
             }
         }
         

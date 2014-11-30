@@ -76,28 +76,58 @@ var CAgent = function (Params, speed, ActiveCollisions) {
         }
 
         this.get_StringPath = function () {
-            var stringpath = (Params.NodeSTART.x > Params.NodeOBJETIVE.x ? "d" : "a" );
+            var stringpath = (Params.NodeSTART.x > Params.NodeOBJETIVE.x ? "d" : "a");
+            var anglestart = (Params.NodeSTART.x > Params.NodeOBJETIVE.x ? 270 : 90);
          
             if (this.nodes.length < 1) {
                 return stringpath;
             }
             
-            var change = this.nodes[0].get_direction(this.nodes[1], 270);
+            var mov = "horizontal";
+            var change = this.nodes[0].get_direction(this.nodes[1], anglestart);
             var prevchange = change;
             for (var i = 0; i < this.nodes.length - 1; i++) {
                 change = (this.nodes[i].get_direction(this.nodes[i + 1], prevchange));
 
-                if (prevchange == change)
+                var prev    = this.nodes[i]
+                var current = this.nodes[i + 1];
+
+                if ((mov == "horizontal" && prev.z == current.z) || (mov == "vertical" && prev.x == current.x))
                     stringpath += "w";
                 else {
-                    var diff =  prevchange - change;
-                    if (diff > 0) 
-                        stringpath += "d";
-                    else if (diff < 0)
-                        stringpath += "a";
+                    if (mov == "horizontal" && prev.z != current.z) {
+                        mov = "vertical";
 
-                    stringpath += "w";
-                    prevchange = change;
+                        if (prevchange == 90) {
+                            if (current.z > prev.z)
+                                stringpath += "dw";
+                            else if (current.z < prev.z)
+                                stringpath += "aw";
+
+                        } else if (prevchange == 270) {
+                            if (current.z > prev.z)
+                                stringpath += "aw";
+                            else if (current.z < prev.z)
+                                stringpath += "dw";
+                        }
+                    }
+                    else if (mov == "vertical" && prev.x != current.x) {
+                        mov = "horizontal";
+
+                        if (prevchange == 180) {
+                            if (current.x > prev.x)
+                                stringpath += "dw";
+                            else if (current.x < prev.x)
+                                stringpath += "aw";
+
+                        } else if (prevchange == 0) {
+                            if (current.x > prev.x)
+                                stringpath += "aw";
+                            else if (current.x < prev.x)
+                                stringpath += "dw";
+                        }
+                    }   
+                    var prevchange = change;
                 }
             }
             return stringpath;
