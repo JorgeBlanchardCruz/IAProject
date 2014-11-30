@@ -4,8 +4,9 @@
  * 
  */
 
-var C3DWorld = function (Antialias, WaterScene) {
-    "use strict";
+"use strict";
+
+var C3DWorld = function (Antialias, OceanScene) {
 
     //STRUCTURES
     function Block(id, type, pathtexture, color, height) {
@@ -14,7 +15,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         this._pathtexture = pathtexture; //si utilizamos texturas el rendimiento es mucho menor
         this._color = color;
         this._height = height;
-    }
+    };
 
     //ATTRIBUTES
     const SEP_COORD = ',';
@@ -29,10 +30,11 @@ var C3DWorld = function (Antialias, WaterScene) {
         //----------------------
 
         //atributos del mapa
-        var MAPMatrix; //estoy hay que mejorarlo, lo he dejado así de forma provisional
+        var _MAPMatrix;
         var _MapWidth = 0, _MapHeight = 0;
         var _Path;
-        var _Agentz, _Agentx;
+        var _NodeSTART;
+        var _NodeOBJETIVE;
         //---------------------
 
     var _TypeBlock;
@@ -46,24 +48,25 @@ var C3DWorld = function (Antialias, WaterScene) {
     //PROCEDURES
     function init() {
         _container = document.createElement('div');
+        _container.id = "3DCanvas";
         document.body.appendChild(_container);
 
         _renderer = new THREE.WebGLRenderer({ antialias: Antialias }); //inicializar Three.js
         _renderer.setSize(window.innerWidth, window.innerHeight);
-        _renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        //_renderer.shadowMapType = THREE.PCFSoftShadowMap;
         _renderer.setClearColor(COLOR_BACKGROUNDSCENE, 1);
 
+        _renderer.domElement.id = "RenderdomElement";
         document.body.appendChild(_renderer.domElement);
 
         _scene = new THREE.Scene(); //crear escena
-        _scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+        //_scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
         _scene.position.set(0, 0, 0);
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
-        _camera.position.set(0, 50, -25);
-        //_camera.position.set(-25, 50, 0);
-        //_camera.rotation.set(0, 0, 0);
-        _camera.lookAt(_scene.position);
+        _camera.position.set(50, 100, 50);
+        //_camera.rotation.set(25, 25, 0);
+        //_camera.lookAt(_scene.position);
 
         _controls = Create_TrackballControls();
 
@@ -71,7 +74,7 @@ var C3DWorld = function (Antialias, WaterScene) {
         Create_directionalLight(0xffffff, 30, 20, -22);
         _directionalLight = Create_directionalLight(0xffffff, -18, 10, 12);
 
-        if (WaterScene) { Create_WaterScene(_directionalLight); }
+        if (OceanScene) { Create_WaterScene(_directionalLight); }
 
         animate();
     }
@@ -82,11 +85,17 @@ var C3DWorld = function (Antialias, WaterScene) {
         //Poned colores y texturas a los blockes asi como el tipo de bloque.
         //(Solo 'obstacle' funcionará para las colisiones)
         _Blocks = [
-            new Block('suelo', _TypeBlock[2], '', '#C2A159', 0.25),
-            new Block('pared', _TypeBlock[0], '', '#8C7518', 1),
-            new Block('escombros', _TypeBlock[1], '', '#DFE36B', 1),
-            new Block('pozo', _TypeBlock[0], '', '#6D8EC7', 0.1)
+            new Block('suelo', _TypeBlock[2], 'meshes/rock3.jpg', '#C2A159', 0.25),
+            new Block('pared', _TypeBlock[0], 'meshes/rock.jpg', '#8C7518', 1),
+            new Block('escombros', _TypeBlock[1], 'meshes/plywood.jpg', '#DFE36B', 1),
+            new Block('pozo', _TypeBlock[0], 'meshes/water.jpg', '#6D8EC7', 0.1)
         ];
+    }
+
+    function Clear_all() {
+        Clear_Cave();
+        document.getElementById(_container.id).remove();
+        document.getElementById(_renderer.domElement.id).remove();
     }
 
     function animate() {
@@ -109,6 +118,8 @@ var C3DWorld = function (Antialias, WaterScene) {
     }
 
     function Create_WaterScene(directionalLight) {
+
+        _scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
         var parameters = {
             width: 2000,
@@ -215,13 +226,6 @@ var C3DWorld = function (Antialias, WaterScene) {
     function Create_ambientLight (color, x, y, z) {
         var ambientLight = new THREE.AmbientLight(color);
         ambientLight.position.set(x, y, z).normalize();
-        ambientLight.castShadow = true;
-        ambientLight.shadowDarkness = 0.5;
-        ambientLight.shadowCameraVisible = true;
-        ambientLight.shadowCameraRight = 5;
-        ambientLight.shadowCameraLeft = -5;
-        ambientLight.shadowCameraTop = 5;
-        ambientLight.shadowCameraBottom = -5;
 
         _scene.add(ambientLight);
 
@@ -231,13 +235,6 @@ var C3DWorld = function (Antialias, WaterScene) {
     function Create_directionalLight (color, x, y, z) {
         var directionalLight = new THREE.DirectionalLight(color);
         directionalLight.position.set(x, y, z);
-        directionalLight.castShadow = true;
-        directionalLight.shadowDarkness = 0.5;
-        directionalLight.shadowCameraVisible = true;
-        directionalLight.shadowCameraRight = 5;
-        directionalLight.shadowCameraLeft = -5;
-        directionalLight.shadowCameraTop = 5;
-        directionalLight.shadowCameraBottom = -5;
 
         _scene.add(directionalLight);
 
@@ -249,16 +246,14 @@ var C3DWorld = function (Antialias, WaterScene) {
         cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.name = name;
         cube.position.set(x, y, z);
-        cube.castShadow = true;
-        cube.receiveShadow = true;
         //cube.rotateOnAxis(new THREE.Vector3(0, 0, 1).normalize(), 0.075);
         _scene.add(cube);
 
         return cube;
     }
 
-    function Create_cubeBlock(block, w, l, x, y, z) {
-        if (block._pathtexture != '')
+    function Create_cubeBlock(block, w, l, x, y, z, Textures) {
+        if ((block._pathtexture != '') && (Textures))
             Create_cubeTexture(block, w, l, x, y, z);
         else
             Create_cube(block._height, w, l, block._color, x, y, z, block._type);
@@ -274,8 +269,6 @@ var C3DWorld = function (Antialias, WaterScene) {
         cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.name = block._type;
         cube.position.set(x, y, z);
-        cube.castShadow = true;
-        cube.receiveShadow = true;
 
         _scene.add(cube);
 
@@ -285,8 +278,6 @@ var C3DWorld = function (Antialias, WaterScene) {
     function Create_torus(radius, tube, radialSegments, tubularSegments, color, x, y, z) {
         var torus = new THREE.Mesh(new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments), new THREE.MeshLambertMaterial({ color: color }));
         torus.position.set(x, y, z);
-        torus.castShadow = true;
-        torus.receiveShadow = true;
         //torus.rotateOnAxis(new THREE.Vector3(0, 0, 1).normalize(), 0.075);
         _scene.add(torus);
 
@@ -296,12 +287,20 @@ var C3DWorld = function (Antialias, WaterScene) {
     function Create_cylinder(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded, color, x, y, z) {
         var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded, false), new THREE.MeshLambertMaterial({ color: color }));
         cylinder.position.set(x, y, z);
-        cylinder.castShadow = true;
-        cylinder.receiveShadow = true;
         //cylinder.rotateOnAxis(new THREE.Vector3(1, 1, 0), 1);
         _scene.add(cylinder);
 
         return cylinder;
+    }
+
+    function Create_sphere(radius, widthSegments, heightSegments, color, x, y, z) {
+        var object = new THREE.Mesh(new THREE.SphereGeometry(radius, widthSegments, heightSegments), new THREE.MeshLambertMaterial({ color: color }));
+        object.id = Number('10' + z.toString() + '10' + x.toString());
+        object.position.set(x, y, z);
+
+        _scene.add(object);
+
+        return object;
     }
 
     function Load_obj(fileobj, filetexture, x, y, z, scalex, scaley, scalez) {
@@ -329,8 +328,6 @@ var C3DWorld = function (Antialias, WaterScene) {
                 });
 
                 object.position.set(x, y, z);
-                object.castShadow = true;
-                object.receiveShadow = true;
                 object.scale.set(scalex, scaley, scalez);
 
                 _objLoad = object;
@@ -349,8 +346,6 @@ var C3DWorld = function (Antialias, WaterScene) {
                 function (object) {
                     object.position.set(x, y, z);
                     object.scale.set(scalex, scaley, scalez);
-                    object.castShadow = true;
-                    object.receiveShadow = true;
 
                     _objLoad = object;
 
@@ -371,8 +366,6 @@ var C3DWorld = function (Antialias, WaterScene) {
             morphColorsToFaceColors(geometry);
             _objLoad = new THREE.MorphAnimMesh(geometry, material2);
             _objLoad.scale.set(.5, .5, .5);
-            _objLoad.castShadow = true;
-            _objLoad.receiveShadow = true;
         });
     }
 
@@ -387,15 +380,16 @@ var C3DWorld = function (Antialias, WaterScene) {
         return undefined;
     }
 
-    function Read_FileMap_Way(content) {
-
+    function Read_FileMap_Way(content, Textures) {
         //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
-        MAPMatrix = new Array();
-        for (var x = 0; x < _MapWidth ; x++)
-            for (var z = 0; z < _MapHeight; z++) {
-                Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z);
-                MAPMatrix.push([z, x, _TypeBlock[0]]);
-            }
+        _MAPMatrix = new Array();
+        for (var z = 0; z < _MapHeight ; z++) {
+            var row = new Array()
+            for (var x = 0; x < _MapWidth; x++)
+                row.push(1);
+
+            _MAPMatrix.push(row);
+        }
 
         //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
         for (var i = LIMAP_CONTENT; i < content.length; i++) {
@@ -407,19 +401,23 @@ var C3DWorld = function (Antialias, WaterScene) {
             var id = Number('10' + Number(z) + '10' + Number(x));
             var selectedObject = _scene.getObjectById(id);
             _scene.remove(selectedObject);
-            if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+            if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[z][x] = type;
         }
     }
 
-    function Read_FileMap_Blocks(content) {
+    function Read_FileMap_Blocks(content, Textures) {
         //Creamos  la matriz del mapa
-        MAPMatrix = new Array();
-        for (var x = 0; x < _MapWidth ; x++)
-            for (var z = 0; z < _MapHeight; z++)
-                MAPMatrix.push([z, x, -1]);
+        _MAPMatrix = new Array();
+        for (var z = 0; z < _MapHeight; z++) {
+            var row = new Array()
+            for (var x = 0; x < _MapWidth; x++)
+                row.push(-1);
+
+            _MAPMatrix.push(row);
+        }
 
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
         for (var i = LIMAP_CONTENT; i < content.length; i++) {
@@ -428,10 +426,16 @@ var C3DWorld = function (Antialias, WaterScene) {
             var x = Number(line.substring(line.lastIndexOf(SEP_COORD) + 1, line.lastIndexOf(SET_TYPE)));
             var type = Number(line.substring(line.lastIndexOf(SET_TYPE) + 1, line.length));
 
-            Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z);
+            var y = (_Blocks[type]._height < 1 ? -0.25 - _Blocks[type]._height : 0);
+
+            //si el bloque es de tipo 1, tenemos el nodo objetivo
+            if (type == 2)
+                _NodeOBJETIVE = new position(z, x);
+
+            Create_cubeBlock(_Blocks[type], 1, 1, x, y, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            MAPMatrix[MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[z][x] = type;
         }
     }
 
@@ -449,15 +453,30 @@ var C3DWorld = function (Antialias, WaterScene) {
     }
 
     //METHODS    
-        //-------------------------------------------------------
+        
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock, path: _Path, posAgent: [_Agentz, _Agentx] }; }
+    this.get_Params = function () {
+        return {
+            scene: _scene,
+            renderer: _renderer,
+            camera: _camera,
+            width: _MapWidth,
+            height: _MapHeight,
+            typesblocks: _TypeBlock,
+            blocks: _Blocks,
+            path: _Path,
+            MAPMatrix: _MAPMatrix,
+            NodeSTART: _NodeSTART,
+            NodeOBJETIVE: _NodeOBJETIVE
+        };
+    }
+        //-------------------------------------------------------
 
         //setters
 
         //-------------------------------------------------------
  
-    this.Create_CaveofMapfile = function (file, callback) {
+    this.Create_CaveofMapfile = function (file, callback, Textures) {
         /*
 
             El formato del fichero es el siguiente:
@@ -488,20 +507,19 @@ var C3DWorld = function (Antialias, WaterScene) {
 
             //crea una plataforma (cubo) donde sustentar el mapa
             width = Number(width) + 1; height = Number(height) + 1;
-            Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1);
+            Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1, Textures);
 
-            //recoge la posición del agente
-            _Agentz = Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD)));
-            _Agentx = Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2));
+            //recoge la posición del agente (z,x)
+            _NodeSTART = new position(Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD))), Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 1)));
+            //_NodeOBJETIVE = new position(1, 0);
 
             //recoge la trayectoria del agente
-            //_Path = content[3].substring(0, content.length - 2);
             _Path = content[3];
          
             if (procetype.substring(0, 3) == 'way')
-                Read_FileMap_Way(content);
+                Read_FileMap_Way(content, Textures);
             else if (procetype.substring(0, 6) == 'blocks')
-                Read_FileMap_Blocks(content);
+                Read_FileMap_Blocks(content, Textures);
 
             callback(); //ejecuta las funciones posteriores a cuando termina la carga del mapa
         };
@@ -511,6 +529,10 @@ var C3DWorld = function (Antialias, WaterScene) {
 
     this.Clear_Cave = function () {
         Clear_Cave();
+    };
+
+    this.Clear_all = function () {
+        Clear_all();
     };
 
     this.Create_ambientLight = function (color, x, y, z) {
