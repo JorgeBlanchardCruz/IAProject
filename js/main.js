@@ -19,7 +19,7 @@ var file_input;
 
 function main() {
 
-    MapCAVE = new C3DWorld(true, true);
+    MapCAVE = new C3DWorld(false, false);
     MapParams = MapCAVE.get_Params();
     
     set_HTMLObjects();
