@@ -4,12 +4,15 @@
  * 
  */
 
+"use strict";
+
 //la dimensión 'y' ha sido bloqueada
 var CAgent = function (Params, speed, ActiveCollisions) {
-    "use strict";
+
 
     //STRUCTURES
-    function path(indx, block, begin, path) {
+    function path(name, indx, block, begin, path) {
+        this._name = name;
         this._indx = indx;
         this._block = block;
         this._begin = begin;
@@ -46,6 +49,59 @@ var CAgent = function (Params, speed, ActiveCollisions) {
              this._begin = false;
              this._indx = 0;
          }
+    }
+
+    function branch(nodes, value, heuristic) {
+        this.nodes = nodes;
+        this.value = Number(value);
+        this.heuristic = Number(heuristic);
+
+        this.SearchNode = function (nodesearch) {
+            for (var i = 0; i < this.nodes.length; i++)
+                if (this.nodes[i].equal(nodesearch))
+                    return i;
+
+            return null;
+        }
+
+        this.CompareLastNode = function (nodesearch) {
+            if (this.nodes[this.nodes.length - 1].equal(nodesearch))
+                return true
+
+            return false;
+        }
+
+        this.clone = function () {
+            return new branch(this.nodes.slice(0), this.value, this.heuristic);
+        }
+
+        this.get_StringPath = function () {
+            var stringpath = (Params.NodeSTART.x > Params.NodeOBJETIVE.x ? "d" : "a" );
+         
+            if (this.nodes.length < 1) {
+                return stringpath;
+            }
+            
+            var change = this.nodes[0].get_direction(this.nodes[1], 270);
+            var prevchange = change;
+            for (var i = 0; i < this.nodes.length - 1; i++) {
+                change = (this.nodes[i].get_direction(this.nodes[i + 1], prevchange));
+
+                if (prevchange == change)
+                    stringpath += "w";
+                else {
+                    var diff =  prevchange - change;
+                    if (diff > 0) 
+                        stringpath += "d";
+                    else if (diff < 0)
+                        stringpath += "a";
+
+                    stringpath += "w";
+                    prevchange = change;
+                }
+            }
+            return stringpath;
+        }
     }
     
 
@@ -101,8 +157,6 @@ var CAgent = function (Params, speed, ActiveCollisions) {
                 function (object) {
                     object.position.set(x, y, z);
                     object.scale.set(scalex, scaley, scalez);
-                    object.castShadow = true;
-                    object.receiveShadow = true;
                     object.name = "agent";
 
                     object.rotation.z = -Math.PI / 2;
@@ -116,13 +170,17 @@ var CAgent = function (Params, speed, ActiveCollisions) {
     }
 
     function Create_marker(z, x) {
-        //var light = new THREE.PointLight('#49A32A', 10, 10);
-        //light.position.set(x, 0, z);
-        //Params.scene.add(light);
-
         var object = new THREE.Mesh(new THREE.SphereGeometry(.15, 50, 50), new THREE.MeshBasicMaterial({ /*transparent: true, opacity: 0.7,*/ color: '#49A32A' }));
         object.name = "marker";
         object.position.set(x, 0, z);
+
+        Params.scene.add(object);
+    }
+
+    function Create_markerCalc(z, x) {
+        var object = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.5, color: '#7938D9' }));
+        object.name = "markerCalc";
+        object.position.set(x, 0.2, z);
 
         Params.scene.add(object);
     }
@@ -387,60 +445,177 @@ var CAgent = function (Params, speed, ActiveCollisions) {
     function Rev() {
         _Path.reset();
         _Visualobj.position.set(Params.NodeSTART.x, 0, Params.NodeSTART.z);
+        _Visualobj.rotation.y = Math.radians(0);
     }
 
-    function Searchstrategy_Astar() {
-        /*
-        1. Formar una lista de trayectorias parciales, ABIERTA, con una trayectoria inicial
+    function Searchstrategy_ASTAR(START, OBJETIVE, Mapcalculation) {
+
+        function next_calculation() {
+            var count_newbranchs = 0;
+
+            function AddCalculation(nbranch, z, x, type) {
+                if ((type == -1) || ((type >= 0 && type <= Params.typesblocks.length - 1) && (Params.blocks[type]._type != 'obstacle'))) {
+
+                    var newnode = new position(z, x);
+                    nbranch.nodes.push(newnode);
+                    nbranch.value += 1;
+                    nbranch.heuristic = heuristic(newnode, OBJETIVE);
+
+                    /* 2B3.Añadir las nuevas trayectorias a la lista ABIERTA, si existen. */
+                    OPEN.push(nbranch);
+
+                    if (Mapcalculation) Create_markerCalc(z, x); //crea un markador de calculo en el mapa
+
+                    count_newbranchs++;
+                }
+
+
+            }
+
+            //añadir las trayectorias posibles
+
+            var NEWbranch = OPEN.shift(); //asigna y elimina la primera rama
+            CLOSE.push(NEWbranch.clone());
+
+            var z = Number(NEWbranch.nodes[NEWbranch.nodes.length - 1].z);
+            var x = Number(NEWbranch.nodes[NEWbranch.nodes.length - 1].x);
+
+            var newz;
+            var newx;
+
+
+            /*  2B2.Formar nuevas trayectorias a partir de la trayectoria eliminada de ABIERTA 
+            ramificando el último nodo de la misma.  */
+            //ramificar abajo
+            newz = z + 1;            
+            if (newz < Params.height) {
+                var type = Params.MAPMatrix[newz][x];
+                AddCalculation(NEWbranch.clone(), newz, x, type);
+            }
+                  
+            //ramificar arriba
+            newz = z - 1;             
+            if (newz >= 0) {
+                var type = Params.MAPMatrix[newz][x];
+                AddCalculation(NEWbranch.clone(), newz, x, type);
+            }
+
+
+            //ramificar derecha
+            newx = x + 1;
+            if (newx < Params.width) {
+                var type = Params.MAPMatrix[z][newx];
+                AddCalculation(NEWbranch.clone(), z, newx, type);
+            }
+ 
+            //ramificar izquierda
+            newx = x - 1;               
+            if (newx >= 0) {
+                var type = Params.MAPMatrix[z][newx];
+                AddCalculation(NEWbranch.clone(), z, newx, type);
+            }                        
+
+            return count_newbranchs;
+        }
+
+        function bound(listA, listB, samelist) {
+
+            for (var i = 0; i < listA.length; i++) {        
+                var branchA = listA[i];
+                var costA   = (branchA.value + branchA.heuristic);
+     
+                for (var j = 0; j < listB.length; j++) {
+                    var branchB = listB[j];
+                    var costB   = (branchB.value + branchB.heuristic);
+
+                    //compara los dos últimos nodos de las listas A y B, y elimina de B la rama que sea de mayor coste
+                    if ((branchA.nodes[branchA.nodes.length - 1].equal(branchB.nodes[branchB.nodes.length - 1]) == true) && (costA <= costB)) {
+                        if ((!samelist) || (samelist && i != j)) {
+                            listB.splice(j, 1);
+                            j--;
+                            i--;
+                        }
+                    }                        
+                }
+            }
+
+        }
+
+        function heuristic(node, objetive){
+            //distancia Manhattan
+            var Manhattan = (Math.abs(Number(node.x) - Number(objetive.x)) + Math.abs(Number(node.z) - Number(objetive.z)));
+            return Manhattan;
+        }
+        //--------------------------------------------
+
+        /*  1. Formar una lista de trayectorias parciales, ABIERTA, con una trayectoria inicial
             que comienza en el nodo raíz. Formar una lista CERRADA, de trayectorias 
-            desechadas mínimas, inicialmente vacía.
+            desechadas mínimas, inicialmente vacía.     */
+        var OPEN = new Array();
+        OPEN.push(new branch(null, 0, heuristic(START, OBJETIVE)));
+        OPEN[0].nodes = new Array();
+        OPEN[0].nodes.push(START);
 
-        2. Hasta que la lista ABIERTA esté vacía o se encuentre el objetivo, analizar su
-            primera trayectoria: 
+        var CLOSE = new Array();
 
-                2A.Si la trayectoria termina en el nodo objetivo, se finaliza el bucle.
-
-                2B.Si la primera trayectoria no termina en el nodo objetivo:
-
-                    2B1.Eliminar la primera trayectoria de la lista ABIERTA, incluyendola en la 
-                        lista CERRADA. En el caso de que ya exista una similar, eliminar la de
-                        mayor coste.
-
-                    2B2.Formar nuevas trayectorias a partir de la trayectoria eliminada de ABIERTA 
-                        ramificando el último nodo de la misma.
-
-                    2B3.Añadir las nuevas trayectorias a la lista ABIERTA, si existen.
-
-                    2B4.Ordenar la lista ABIERTA en base al costo total estimado de cada una,
-                        colocando la de mínimo coste al inicio de la lista.
-
-                    2B5. Si dos o más trayectorias de ABIERTA acaban en un nodo común, borrar las 
-                        mismas excepto la que posee mínimo coste entre ellas. Eliminar esta última
-                        también si existe una similar con menor coste en la lista CERRADA. Al 
-                        eliminar trayectorias de ABIERTA deben insertarse en CERRADA salvo que ya
-                        exista allí una similar de menor coste.
-
-        3. Si se alcanza el nodo objetivo, el problema tiene solución y se determina la 
-            trayectoria óptima, en caso contrario no existe solución.
-        */
-
-        Params.MAPMatrix
-
-        var OPEN = null, CLOSE = null;
+        var i = 0;
+        /*  2. Hasta que la lista ABIERTA esté vacía o se encuentre el objetivo, analizar su
+        primera trayectoria: */
+        /*  2A.Si la trayectoria termina en el nodo objetivo, se finaliza el bucle. */
+        while (((OPEN.length != 0) && (!OPEN[0].CompareLastNode(OBJETIVE)))) {       
+            /*  2B.Si la primera trayectoria no termina en el nodo objetivo:    */
 
 
+            /*  2B1.Eliminar la primera trayectoria de la lista ABIERTA, incluyendola en la 
+                lista CERRADA. En el caso de que ya exista una similar, eliminar la de
+                mayor coste.                
+                
+                2B2.Formar nuevas trayectorias a partir de la trayectoria eliminada de ABIERTA 
+                ramificando el último nodo de la misma.
+                
+                2B3.Añadir las nuevas trayectorias a la lista ABIERTA, si existen.   */
+            var count_newbranchs = next_calculation();
 
+            //  En el caso de que ya exista una similar, eliminar la de mayor coste.
+            bound(OPEN, OPEN, true);
+
+            /*  2B5. Si dos o más trayectorias de ABIERTA acaban en un nodo común, borrar las 
+                mismas excepto la que posee mínimo coste entre ellas. Eliminar esta última
+                también si existe una similar con menor coste en la lista CERRADA. Al 
+                eliminar trayectorias de ABIERTA deben insertarse en CERRADA salvo que ya
+                exista allí una similar de menor coste. */
+            bound(CLOSE, OPEN, false);
+            
+            /*  2B4.Ordenar la lista ABIERTA en base al costo total estimado de cada una,
+                colocando la de mínimo coste al inicio de la lista. */
+            OPEN.sort(function (nodeA, nodeB) {
+                return (nodeA.value + nodeA.heuristic) - (nodeB.value + nodeB.heuristic);
+            });
+            
+            i++;
+        }
+
+        /*  3. Si se alcanza el nodo objetivo, el problema tiene solución y se determina la 
+            trayectoria óptima, en caso contrario no existe solución. */
+        if (OPEN.length != 0)
+            return OPEN[0].get_StringPath();
+
+        return "";
     }
 
     //METHODS
     this.Move = function (movement) { Move(movement); };
 
-    this.SetPath = function (agentpath) {
-        _Path = new path(0, 0, false, agentpath);
+    this.setPath = function (name, agentpath) {
+        _Path = new path(name, 0, 0, false, agentpath);
     }
 
     this.Rev = function () {
         Rev();
+    }
+
+    this.Searchstrategy_ASTAR = function (START, OBJETIVE, Mapcalculation) {
+        return Searchstrategy_ASTAR(START, OBJETIVE, Mapcalculation);
     }
 
 };

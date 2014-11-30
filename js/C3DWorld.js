@@ -4,8 +4,9 @@
  * 
  */
 
+"use strict";
+
 var C3DWorld = function (Antialias, OceanScene) {
-    "use strict";
 
     //STRUCTURES
     function Block(id, type, pathtexture, color, height) {
@@ -14,11 +15,6 @@ var C3DWorld = function (Antialias, OceanScene) {
         this._pathtexture = pathtexture; //si utilizamos texturas el rendimiento es mucho menor
         this._color = color;
         this._height = height;
-    };
-
-    function position(z, x) {
-        this.z = z;
-        this.x = x;
     };
 
     //ATTRIBUTES
@@ -57,14 +53,14 @@ var C3DWorld = function (Antialias, OceanScene) {
 
         _renderer = new THREE.WebGLRenderer({ antialias: Antialias }); //inicializar Three.js
         _renderer.setSize(window.innerWidth, window.innerHeight);
-        _renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        //_renderer.shadowMapType = THREE.PCFSoftShadowMap;
         _renderer.setClearColor(COLOR_BACKGROUNDSCENE, 1);
 
         _renderer.domElement.id = "RenderdomElement";
         document.body.appendChild(_renderer.domElement);
 
         _scene = new THREE.Scene(); //crear escena
-        _scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+        //_scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
         _scene.position.set(0, 0, 0);
 
         _camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 3000000); //creando la cámara
@@ -122,6 +118,8 @@ var C3DWorld = function (Antialias, OceanScene) {
     }
 
     function Create_WaterScene(directionalLight) {
+
+        _scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
         var parameters = {
             width: 2000,
@@ -228,13 +226,6 @@ var C3DWorld = function (Antialias, OceanScene) {
     function Create_ambientLight (color, x, y, z) {
         var ambientLight = new THREE.AmbientLight(color);
         ambientLight.position.set(x, y, z).normalize();
-        ambientLight.castShadow = true;
-        ambientLight.shadowDarkness = 0.5;
-        ambientLight.shadowCameraVisible = true;
-        ambientLight.shadowCameraRight = 5;
-        ambientLight.shadowCameraLeft = -5;
-        ambientLight.shadowCameraTop = 5;
-        ambientLight.shadowCameraBottom = -5;
 
         _scene.add(ambientLight);
 
@@ -244,13 +235,6 @@ var C3DWorld = function (Antialias, OceanScene) {
     function Create_directionalLight (color, x, y, z) {
         var directionalLight = new THREE.DirectionalLight(color);
         directionalLight.position.set(x, y, z);
-        directionalLight.castShadow = true;
-        directionalLight.shadowDarkness = 0.5;
-        directionalLight.shadowCameraVisible = true;
-        directionalLight.shadowCameraRight = 5;
-        directionalLight.shadowCameraLeft = -5;
-        directionalLight.shadowCameraTop = 5;
-        directionalLight.shadowCameraBottom = -5;
 
         _scene.add(directionalLight);
 
@@ -262,8 +246,6 @@ var C3DWorld = function (Antialias, OceanScene) {
         cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.name = name;
         cube.position.set(x, y, z);
-        cube.castShadow = true;
-        cube.receiveShadow = true;
         //cube.rotateOnAxis(new THREE.Vector3(0, 0, 1).normalize(), 0.075);
         _scene.add(cube);
 
@@ -287,8 +269,6 @@ var C3DWorld = function (Antialias, OceanScene) {
         cube.id = Number('10' + z.toString() + '10' + x.toString());
         cube.name = block._type;
         cube.position.set(x, y, z);
-        cube.castShadow = true;
-        cube.receiveShadow = true;
 
         _scene.add(cube);
 
@@ -298,8 +278,6 @@ var C3DWorld = function (Antialias, OceanScene) {
     function Create_torus(radius, tube, radialSegments, tubularSegments, color, x, y, z) {
         var torus = new THREE.Mesh(new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments), new THREE.MeshLambertMaterial({ color: color }));
         torus.position.set(x, y, z);
-        torus.castShadow = true;
-        torus.receiveShadow = true;
         //torus.rotateOnAxis(new THREE.Vector3(0, 0, 1).normalize(), 0.075);
         _scene.add(torus);
 
@@ -309,8 +287,6 @@ var C3DWorld = function (Antialias, OceanScene) {
     function Create_cylinder(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded, color, x, y, z) {
         var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded, false), new THREE.MeshLambertMaterial({ color: color }));
         cylinder.position.set(x, y, z);
-        cylinder.castShadow = true;
-        cylinder.receiveShadow = true;
         //cylinder.rotateOnAxis(new THREE.Vector3(1, 1, 0), 1);
         _scene.add(cylinder);
 
@@ -321,8 +297,6 @@ var C3DWorld = function (Antialias, OceanScene) {
         var object = new THREE.Mesh(new THREE.SphereGeometry(radius, widthSegments, heightSegments), new THREE.MeshLambertMaterial({ color: color }));
         object.id = Number('10' + z.toString() + '10' + x.toString());
         object.position.set(x, y, z);
-        object.castShadow = true;
-        object.receiveShadow = true;
 
         _scene.add(object);
 
@@ -354,8 +328,6 @@ var C3DWorld = function (Antialias, OceanScene) {
                 });
 
                 object.position.set(x, y, z);
-                object.castShadow = true;
-                object.receiveShadow = true;
                 object.scale.set(scalex, scaley, scalez);
 
                 _objLoad = object;
@@ -374,8 +346,6 @@ var C3DWorld = function (Antialias, OceanScene) {
                 function (object) {
                     object.position.set(x, y, z);
                     object.scale.set(scalex, scaley, scalez);
-                    object.castShadow = true;
-                    object.receiveShadow = true;
 
                     _objLoad = object;
 
@@ -396,8 +366,6 @@ var C3DWorld = function (Antialias, OceanScene) {
             morphColorsToFaceColors(geometry);
             _objLoad = new THREE.MorphAnimMesh(geometry, material2);
             _objLoad.scale.set(.5, .5, .5);
-            _objLoad.castShadow = true;
-            _objLoad.receiveShadow = true;
         });
     }
 
@@ -413,14 +381,15 @@ var C3DWorld = function (Antialias, OceanScene) {
     }
 
     function Read_FileMap_Way(content, Textures) {
-
         //Creamos los bloques ocupando todo el mapa y tambien la matriz del mapa
         _MAPMatrix = new Array();
-        for (var x = 0; x < _MapWidth ; x++)
-            for (var z = 0; z < _MapHeight; z++) {
-                Create_cubeBlock(_Blocks[1], 1, 1, x, 0, z, Textures);
-                _MAPMatrix.push([z, x, _TypeBlock[0]]);
-            }
+        for (var z = 0; z < _MapHeight ; z++) {
+            var row = new Array()
+            for (var x = 0; x < _MapWidth; x++)
+                row.push(1);
+
+            _MAPMatrix.push(row);
+        }
 
         //leemos linea a linea del fichero de texto y eliminamos los bloques encontrados
         for (var i = LIMAP_CONTENT; i < content.length; i++) {
@@ -435,16 +404,20 @@ var C3DWorld = function (Antialias, OceanScene) {
             if (type != -1) Create_cubeBlock(_Blocks[type], 1, 1, x, 0, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            _MAPMatrix[_MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[z][x] = type;
         }
     }
 
     function Read_FileMap_Blocks(content, Textures) {
         //Creamos  la matriz del mapa
         _MAPMatrix = new Array();
-        for (var x = 0; x < _MapWidth ; x++)
-            for (var z = 0; z < _MapHeight; z++)
-                _MAPMatrix.push([z, x, -1]);
+        for (var z = 0; z < _MapHeight; z++) {
+            var row = new Array()
+            for (var x = 0; x < _MapWidth; x++)
+                row.push(-1);
+
+            _MAPMatrix.push(row);
+        }
 
         //leemos linea a linea del fichero de texto e insertamos los bloques encontrados
         for (var i = LIMAP_CONTENT; i < content.length; i++) {
@@ -455,10 +428,14 @@ var C3DWorld = function (Antialias, OceanScene) {
 
             var y = (_Blocks[type]._height < 1 ? -0.25 - _Blocks[type]._height : 0);
 
+            //si el bloque es de tipo 1, tenemos el nodo objetivo
+            if (type == 2)
+                _NodeOBJETIVE = new position(z, x);
+
             Create_cubeBlock(_Blocks[type], 1, 1, x, y, z, Textures);
 
             //modifica el elemento del array de mapa correspondiente
-            _MAPMatrix[_MAPMatrix.indexOf([z, x, _TypeBlock[0]])] = [z, x, _TypeBlock[type]];
+            _MAPMatrix[z][x] = type;
         }
     }
 
@@ -478,7 +455,21 @@ var C3DWorld = function (Antialias, OceanScene) {
     //METHODS    
         
         //getters
-    this.get_Params = function () { return { scene: _scene, renderer: _renderer, camera: _camera, width: _MapWidth, height: _MapHeight, typesblocks: _TypeBlock, path: _Path, MAPMatrix: _MAPMatrix, NodeSTART: _NodeSTART, nodeObjetive: null }; }
+    this.get_Params = function () {
+        return {
+            scene: _scene,
+            renderer: _renderer,
+            camera: _camera,
+            width: _MapWidth,
+            height: _MapHeight,
+            typesblocks: _TypeBlock,
+            blocks: _Blocks,
+            path: _Path,
+            MAPMatrix: _MAPMatrix,
+            NodeSTART: _NodeSTART,
+            NodeOBJETIVE: _NodeOBJETIVE
+        };
+    }
         //-------------------------------------------------------
 
         //setters
@@ -519,8 +510,9 @@ var C3DWorld = function (Antialias, OceanScene) {
             Create_cubeBlock(_Blocks[0], width, height, (width / 2) - 1, -0.5, (height / 2) - 1, Textures);
 
             //recoge la posición del agente (z,x)
-            _NodeSTART = new position(Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD))), Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 2)));
-            
+            _NodeSTART = new position(Number(content[2].substring(0, content[2].lastIndexOf(SEP_COORD))), Number(content[2].substring(content[2].lastIndexOf(SEP_COORD) + 1, content.length - 1)));
+            //_NodeOBJETIVE = new position(1, 0);
+
             //recoge la trayectoria del agente
             _Path = content[3];
          

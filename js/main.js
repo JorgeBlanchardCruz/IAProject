@@ -10,12 +10,63 @@
 window.onload = main;
 
 
+function position(z, x) {
+    this.z = z;
+    this.x = x;
+
+    this.equal = function (poscompare) {
+        if ((this.z == poscompare.z) && (this.x == poscompare.x))
+            return true;
+
+        return false;
+    }
+
+    this.get_direction = function (poscompare, prevpos) {
+        //no hay movimientos en diagonal
+        if ((this.z == poscompare.z) && (this.x == poscompare.x))
+            return null;
+
+        if (this.z == poscompare.z){
+            if (prevpos == 0){
+                if (poscompare.x > this.x)
+                    return 270;
+                else if (poscompare.x < this.x)
+                    return 90;
+            }
+            else if (prevpos == 180) {
+                if (poscompare.x > this.x)
+                    return 270;
+                else if (poscompare.x < this.x)
+                    return 90;
+            }
+        }
+
+        if (this.x == poscompare.x){
+            if (prevpos == 270){
+                if (poscompare.z > this.z)
+                    return 180;
+                else if (poscompare.z < this.z)
+                    return 0;
+            }
+            else if (prevpos == 90) {
+                if (poscompare.z > this.z)
+                    return 180;
+                else if (poscompare.z < this.z)
+                    return 0;
+            }
+        }
+        
+        return prevpos;
+    }
+};
+
+
 var MapCAVE;
 var MotherSHIP;
 
 var MapParams;
 
-var OceanScene = false, Antialiasing = true, Textures = false;
+var OceanScene = false, Antialiasing = true, Textures = false, Mapcalculation = false;
 
 
 //UI objects
@@ -25,9 +76,11 @@ var OceanScene = false, Antialiasing = true, Textures = false;
     var chbOceanScene;
     var chbAntialiasing;
     var chbTexturas;
+    var chbMapcalculation;
+    var btnCalcASTAR;
     var btnPlay;
     var btnPause;
-    var btnRev;
+    var btnRev;  
 //--------------------
 
 
@@ -42,6 +95,7 @@ function main() {
 
 //PROCEDURES
 function set_HTMLObjects() {
+    btnCalcASTAR = document.getElementById('btnCalcASTAR');
     btnPlay = document.getElementById('btnPlay');
     btnPause = document.getElementById('btnPause');
     btnRev = document.getElementById('btnRev');
@@ -52,10 +106,12 @@ function set_HTMLObjects() {
     chbOceanScene = document.getElementById('chbOceanScene');
     chbAntialiasing = document.getElementById('chbAntialiasing');
     chbTexturas = document.getElementById('chbTexturas');
+    chbMapcalculation = document.getElementById('chbMapcalculation');
 
     chbOceanScene.checked = OceanScene;
     chbAntialiasing.checked = Antialiasing;
     chbTexturas.checked = Textures;
+    chbMapcalculation.checked = Mapcalculation;
 }
 
 function Add_Events() {
@@ -63,6 +119,7 @@ function Add_Events() {
     document.onkeypress = document_onkeypress;
     window.addEventListener('resize', onWindowResize, false);
 
+    btnCalcASTAR.addEventListener('click', CalculateASTAR);
     btnPlay.addEventListener('click', Play);
     btnPause.addEventListener('click', Pause);
     btnRev.addEventListener('click', Rev);
@@ -73,14 +130,16 @@ function Add_Events() {
     chbOceanScene.addEventListener('change', onConfigChange);
     chbAntialiasing.addEventListener('change', onConfigChange);
     chbTexturas.addEventListener('change', onConfigChange);
+    chbMapcalculation.addEventListener('change', onConfigChange);
 
 }
 
 function Load3DUI() {
     if (MapCAVE != null) MapCAVE.Clear_all();
-
+   
     MapCAVE = new C3DWorld(Antialiasing, OceanScene);
     MapParams = MapCAVE.get_Params();
+    MotherSHIP = null;
 }
 
 function Create_Mothership() { //lo necesito para utilizarlo de callback
@@ -118,6 +177,11 @@ function AgentMove(key) {
         MotherSHIP.Agent().Move(key);
 }
 
+function CalculateASTAR() {
+    if (MotherSHIP != null)
+        MotherSHIP.CalculateASTAR(Mapcalculation);
+}
+
 function Play() {
     AgentMove('i');
 }
@@ -130,7 +194,6 @@ function Rev() {
     if (MotherSHIP != null)
         MotherSHIP.Agent().Rev();
 }
-
 
 //EVENTS
 function onWindowResize() {
@@ -148,6 +211,7 @@ function onConfigChange() {
     OceanScene = chbOceanScene.checked;
     Antialiasing = chbAntialiasing.checked;
     Textures = chbTexturas.checked;
+    Mapcalculation = chbMapcalculation.checked;
 }
 
 function btnfile_input_onchange() {
