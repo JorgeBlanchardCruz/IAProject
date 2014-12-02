@@ -268,7 +268,7 @@ var CAgent = function (Params, speed, ActiveCollisions) {
     }
 
     function BlockbyBlock() {
-        if (_Path._block < 1) {
+        if (_Path._block < 0.98) {
             _Visualobj.translateZ((Borders_Delimeters() ? (ActiveCollisions ? (Collisions() ? _speed : 0) : _speed) : 0));
             _Path._block += _speed;
         }
@@ -464,18 +464,13 @@ var CAgent = function (Params, speed, ActiveCollisions) {
         requestAnimationFrame(animate);
 
         if (_Visualobj != null) AccionAnimation();
-
-        render();
-    }
-
-    function render() {
-        Params.renderer.render(Params.scene, Params.camera);
     }
 
     function Rev() {
         _Path.reset();
         _Visualobj.position.set(Params.NodeSTART.x, 0, Params.NodeSTART.z);
-        _Visualobj.rotation.y = Math.radians(0);
+        _direction = 0;
+        _Visualobj.rotation.y = _direction;
     }
 
     function Searchstrategy_ASTAR(START, OBJETIVE, Mapcalculation) {
@@ -494,12 +489,12 @@ var CAgent = function (Params, speed, ActiveCollisions) {
                     /* 2B3.Añadir las nuevas trayectorias a la lista ABIERTA, si existen. */
                     OPEN.push(nbranch);
 
-                    if (Mapcalculation) Create_markerCalc(z, x); //crea un markador de calculo en el mapa
+                    if (Mapcalculation) {
+                        Create_markerCalc(z, x); //crea un markador de calculo en el mapa
+                    }
 
                     count_newbranchs++;
                 }
-
-
             }
 
             //añadir las trayectorias posibles
@@ -642,6 +637,10 @@ var CAgent = function (Params, speed, ActiveCollisions) {
 
     this.Rev = function () {
         Rev();
+    }
+
+    this.ChangeSpeed = function (speed) {
+        _speed = speed;
     }
 
     this.Searchstrategy_ASTAR = function (START, OBJETIVE, Mapcalculation) {

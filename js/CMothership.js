@@ -5,7 +5,7 @@
  */
 "use strict";
 
-var CMothership = function (Params) {
+var CMothership = function (Params, AgentSpeed) {
 
     var _Agent;
     var Pathjs, PathCSHarp;
@@ -15,7 +15,7 @@ var CMothership = function (Params) {
 
     //PROCEDURES
     function init() {
-        _Agent = new CAgent(Params, 0.05, true);
+        _Agent = new CAgent(Params, AgentSpeed, true);
 
         PathCSHarp = Params.path;
 
