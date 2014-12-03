@@ -27,32 +27,32 @@ function position(z, x) {
             return null;
 
         if (this.z == poscompare.z){
-            if (prevpos == 0){
+            if (prevpos == 0  || prevpos == 270){
                 if (poscompare.x > this.x)
-                    return 270;
-                else if (poscompare.x < this.x)
                     return 90;
+                else if (poscompare.x < this.x)
+                    return 270;
             }
-            else if (prevpos == 180) {
+        if (prevpos == 180 || prevpos == 90) {
                 if (poscompare.x > this.x)
-                    return 270;
-                else if (poscompare.x < this.x)
                     return 90;
+                else if (poscompare.x < this.x)
+                    return 270;
             }
         }
 
         if (this.x == poscompare.x){
-            if (prevpos == 270){
+            if (prevpos == 270 || prevpos == 0) {
                 if (poscompare.z > this.z)
-                    return 180;
+                    return 0;  //revisado
                 else if (poscompare.z < this.z)
-                    return 0;
+                    return 180;
             }
-            else if (prevpos == 90) {
+            if (prevpos == 90 || prevpos == 180) {
                 if (poscompare.z > this.z)
-                    return 180;
-                else if (poscompare.z < this.z)
                     return 0;
+                else if (poscompare.z < this.z)
+                    return 180;
             }
         }
         
@@ -68,6 +68,7 @@ var MapParams;
 
 var OceanScene = false, Antialiasing = true, Textures = false, Mapcalculation = false;
 
+var AgentSpeed = 0.05;
 
 
 //UI objects
@@ -80,6 +81,7 @@ var OceanScene = false, Antialiasing = true, Textures = false, Mapcalculation = 
     var chbMapcalculation;
     var btnCalcASTAR;
     var btnPlay;
+    var btnPlayFast;
     var btnPause;
     var btnRev;  
 //--------------------
@@ -99,6 +101,7 @@ function main() {
 function set_HTMLObjects() {
     btnCalcASTAR = document.getElementById('btnCalcASTAR');
     btnPlay = document.getElementById('btnPlay');
+    btnPlayFast = document.getElementById('btnPlayFast');
     btnPause = document.getElementById('btnPause');
     btnRev = document.getElementById('btnRev');
 
@@ -123,6 +126,7 @@ function Add_Events() {
 
     btnCalcASTAR.addEventListener('click', CalculateASTAR);
     btnPlay.addEventListener('click', Play);
+    btnPlayFast.addEventListener('click', ChangeSpeed);
     btnPause.addEventListener('click', Pause);
     btnRev.addEventListener('click', Rev);
 
@@ -146,7 +150,7 @@ function Load3DUI() {
 
 function Create_Mothership() { //lo necesito para utilizarlo de callback
     MapParams = MapCAVE.get_Params();
-    MotherSHIP = new CMothership(MapParams);
+    MotherSHIP = new CMothership(MapParams, AgentSpeed);
 }
 
 function toggleFullScreen() {
@@ -186,6 +190,23 @@ function CalculateASTAR() {
 
 function Play() {
     AgentMove('i');
+}
+
+function ChangeSpeed() {
+    if (MotherSHIP == null)
+        return undefined;
+
+    switch (AgentSpeed) {
+        case 0.05:
+            AgentSpeed = 0.2;
+            break;
+        case 0.2:
+            AgentSpeed = 0.5;
+            break;  
+        default:
+            AgentSpeed = 0.05;
+    }
+    MotherSHIP.Agent().ChangeSpeed(AgentSpeed);
 }
 
 function Pause() {

@@ -85,10 +85,10 @@ var C3DWorld = function (Antialias, OceanScene) {
         //Poned colores y texturas a los blockes asi como el tipo de bloque.
         //(Solo 'obstacle' funcionará para las colisiones)
         _Blocks = [
-            new Block('suelo', _TypeBlock[2], 'meshes/rock3.jpg', '#C2A159', 0.25),
-            new Block('pared', _TypeBlock[0], 'meshes/rock.jpg', '#8C7518', 1),
-            new Block('escombros', _TypeBlock[1], 'meshes/plywood.jpg', '#DFE36B', 1),
-            new Block('pozo', _TypeBlock[0], 'meshes/water.jpg', '#6D8EC7', 0.1)
+            new Block('suelo', _TypeBlock[2], 'meshes/rock3.jpg', '#91683C', 0.25),
+            new Block('pared', _TypeBlock[0], 'meshes/rock.jpg', '#6B5A37', 1),
+            new Block('escombros', _TypeBlock[1], 'meshes/plywood.jpg', '#F2D21D', 1),
+            new Block('pozo', _TypeBlock[0], 'meshes/water.jpg', '#3D85B3', 0.1)
         ];
     }
 
@@ -445,7 +445,9 @@ var C3DWorld = function (Antialias, OceanScene) {
             if ((object.name == _TypeBlock[0]) ||
                 (object.name == _TypeBlock[1]) ||
                 (object.name == _TypeBlock[2]) ||
-                (object.name == "agent")) {
+                (object.name == "agent") ||
+                (object.name == "marker") ||
+                (object.name == "markerCalc")) {
                 _scene.remove(object);
                 i--;
             }
