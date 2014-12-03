@@ -15,19 +15,15 @@ namespace GeneradorMapa
     public class Robot
     {
        private int[] sensores_;
-     //  private List<int>[] mapaConocido_;
        private Method metodo_;
        private Posicion pos_;
        private Trayectoria trayectoria_;
        private Form1 parent_;
        private Posicion meta_;
-        //Modificar grafo por matriz, realmente es necesario????
-
-        //Modificar grafo por matriz, realmente es necesario????
+ 
        public Robot(int a, int b, int x, int y, Form1 p)
        {
-           sensores_ = new int[4];
-       //    mapaConocido_ = new List<int>[a * b];
+           sensores_ = new int[4];     
            pos_ = new Posicion(x, y);
            meta_ = new Posicion(a, b);
            parent_ = p;
@@ -72,34 +68,7 @@ namespace GeneradorMapa
                sensores_[(int)Direcciones.OESTE] = -1;
            }
        }
-      /* private void actualizarMapaConocido()
-       {
-           if (sensores_[(int)Direcciones.NORTE] == 0)
-           {
-               mapaConocido_[toNodo(pos_.x, pos_.y)].Add(toNodo(pos_.x, pos_.y - 1));
-           }
-            if (sensores_[(int)Direcciones.SUR] == 0)
-           {
-               mapaConocido_[toNodo(pos_.x, pos_.y)].Add(toNodo(pos_.x, pos_.y + 1));
-           }
-            if (sensores_[(int)Direcciones.ESTE] == 0)
-           {
-               mapaConocido_[toNodo(pos_.x, pos_.y)].Add(toNodo(pos_.x + 1, pos_.y));
-           }
-            if (sensores_[(int)Direcciones.OESTE] == 0)
-           {
-               mapaConocido_[toNodo(pos_.x, pos_.y)].Add(toNodo(pos_.x - 1, pos_.y));
-           }
-    }
-        private int toNodo(int i, int j) {return (i * parent_.get_tab().get_columns() + j);}
-        private int toPos(int n)
-        {
-            int i;
-            int j;
-            n += 1;
-            i = (int) Math.Ceiling((float)((float)n / (float)parent_.get_tab().get_columns())) - 1;
-            return i;
-        }*/
+
        public Posicion get_pos() { return pos_; }
        public void set_pos(Posicion p) { pos_ = p; }
        public Trayectoria get_trayectoria() { return trayectoria_; }

@@ -57,15 +57,6 @@ namespace GeneradorMapa
                     ramificar(aux);
                     //Añadir las nuevas trayectorias a la lista abierta
                     //Ordenar la abierta y eliminar con el mismo final tanto en abierta como en cerrada
-                /*    var sortedA =
-                         from w in A_
-                         orderby w.get_coste()
-                         select w;
-                    A_.Clear();
-                    foreach (var i in sortedA)
-                    {
-                        A_.Add(i);
-                    }*/
                     A_.Sort(ComparaCostes);
                 } 
            }
@@ -105,8 +96,6 @@ namespace GeneradorMapa
         void ramificar(TrayectoriaParcial t)
         {
             List<TrayectoriaParcial> nuevas = new List<TrayectoriaParcial>();
-
-            //Mover al bicho hasta nodo en común, bla bla pero por ahora con teletransporte :D
 
             robot_.set_pos(toPosicion(t.get_Nfinal()));
             robot_.actualizarSensores();

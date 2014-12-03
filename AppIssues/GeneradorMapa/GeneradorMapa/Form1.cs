@@ -18,21 +18,16 @@ namespace GeneradorMapa
       private bool creado_;
       private Robot robot_;
 
-    //  public string prueba;
         public Form1()
         {
-        //    prueba = "hola";
             robot_ = null;
             creado_ = false;
             entrada = null;
             selected_ = -1;
-           // _C = new System.Windows.Forms.Label(); ;
             tab_ = new Cuadricula(0, 0, 0,this);
             InitializeComponent();
-            //this.Opacity = .75;
             this.WindowState = FormWindowState.Maximized;
-            //Paleta p = new Paleta();
-           // p.Show();
+
         }
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -41,8 +36,9 @@ namespace GeneradorMapa
             {
                 Form2 f = new Form2(this);
                 f.Show();
-                
             }
+            else
+                MessageBox.Show("Ya se ha creado un mapa.");
         }
         private void generarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -67,7 +63,6 @@ namespace GeneradorMapa
        
             if (ok)
             {
-                //this.SuspendLayout();
                 tab_ = new Cuadricula(Convert.ToInt32(cad[0]), Convert.ToInt32(cad[1]), Convert.ToInt32(cad[2]),this);
                 for (int i = 0; i < tab_.get_rows(); i++)
                 {
@@ -77,15 +72,14 @@ namespace GeneradorMapa
                         this.tab_.get_Celda(i, j).Click += new System.EventHandler(this.tab_.get_Celda(i, j).Celda_Click);
                     }
                 }
-               // this.ResumeLayout(false);
+     
                 creado_ = true;
-            }
-           // MessageBox.Show(prueba);
+            }     
         }
         private void generarFichero()
         {
             string[] cad = entrada.Split('x');
-            bool ok = true;
+            bool ok = false;
             List<string> texto = new List<string>();
             bool inicio = false;
             bool final = false;
@@ -105,6 +99,7 @@ namespace GeneradorMapa
                             inicio = true;
                             texto.Add(Convert.ToString(j) + "," + Convert.ToString(i));
                             robot_ = new Robot(0, 0, i, j, this);
+                            ok = true;
 
                         }
                         else
@@ -123,29 +118,28 @@ namespace GeneradorMapa
                     }
                 }
             }
-
-            robot_.set_meta(meta);
-            generar_recorrido();
-            texto.Add(robot_.get_trayectoria().get_trayectoria());
-            for (int i = 0; i < tab_.get_rows(); i++)
+            if (ok)
             {
-                for (int j = 0; j < tab_.get_columns(); j++)
+                robot_.set_meta(meta);
+                generar_recorrido();
+                texto.Add(robot_.get_trayectoria().get_trayectoria());
+                for (int i = 0; i < tab_.get_rows(); i++)
                 {
-                    if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 4)
+                    for (int j = 0; j < tab_.get_columns(); j++)
                     {
-                        texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
+                        if (tab_.get_Celda(i, j).get_index() != 0 && tab_.get_Celda(i, j).get_index() != 4)
+                        {
+                            texto.Add(Convert.ToString(j) + "," + Convert.ToString(i) + ";" + Convert.ToString(tab_.get_Celda(i, j).get_index()));
 
+                        }
                     }
+
                 }
 
-            }
 
-           
 
-            if (ok)
-            {/////PROBLEMAS CON EL PATH, Hay q buscar la forma de hacerlo relativo
 
-                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"C:\Users\Sir\Documents\map.map"))
+                using (System.IO.TextWriter mapa = new System.IO.StreamWriter(@"..\..\..\..\..\mapfiles\generado.map"))
                 {
                     texto.ForEach(delegate(string ln)
                     {
@@ -154,8 +148,10 @@ namespace GeneradorMapa
 
 
                 }
+                MessageBox.Show("Mapa creado.");
             }
-               // MessageBox.Show(texto[2]);
+            else
+                MessageBox.Show("El formato del mapa no es correcto.");
         }
 
 
