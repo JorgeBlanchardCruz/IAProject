@@ -1,5 +1,29 @@
-Solo probado con Firefox
+Solo probado con Firefox, aunque también funciona en Internet Explorer.
+Despliegue:  http://alu0100536591.github.io/IAProject/
+Repositorio: https://github.com/alu0100536591/IAProject
+
+
+Para ejecutar la aplicación web:
+1. Abra con Mozilla Firefox (mínimo versión 33.1) el fichero 'index.html'
+	Si el navegador muestra una barra superior en tonos negros y un fondo central en color azul celeste es que se ha ejecutado correctamente.
+	La configuración 3d viene configurada por defecto en Firefox.
+2. Para cargar un mapa existente: Haga click en el botón del 'engranaje' que se encuentra en la barra superior de la aplicación -> mostrará un desplegable -> y a continuación podrá hacer click en el icono de la carpeta para seleccionar un fichero de su máquina.
+
+	En el directorio 'mapfiles/' encontrará ejemplos de mapas ya generados.
+
+3. Para ejecutar la estrategia de búsqueda A* pulse el botón con el icono del ‘Cohete’ de color azul.
+
+4. Pulse el botón 'Play' para ver el camino mínimo representado por el robot.
 
 
 
-http://alu0100536591.github.io/IAProject/
+
+Para ejecutar el Generador de Mapas:
+1. Ejecute el fichero 'GeneradorMapa.exe' que se encuentra en el directorio 'AppIssues\GeneradorMapa\GeneradorMapa\bin\Debug'
+
+2. Haga click en 'Crear' e indroduzca las dimensiones del mapa y el número de obstaculos que desea generar aleatoriamente. (ejemplo:20x20x150)
+
+3. Pulse 'Generar mapa' para crear un fichero de mapa en el directorio 'mapfiles\' con el nombre 'generado.map'.
+
+
+	
