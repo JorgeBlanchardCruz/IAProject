@@ -39,12 +39,14 @@ namespace GeneradorMapa
         {
             TrayectoriaParcial aux =null;
             int n;
+            bool ok = false;
             while (A_.Count != 0)
             {
                 aux = A_[0];
                 //Analizar primera trayectoria, si termina en objetivo terminar.
                 if (aux.get_Nfinal() == (n = toNodo(robot_.get_meta().x, robot_.get_meta().y)))
                 {
+                    ok = true;
                     //Finalizar
                     A_.Clear();
                 }
@@ -60,7 +62,8 @@ namespace GeneradorMapa
                     A_.Sort(ComparaCostes);
                 } 
            }
-
+            aux = new TrayectoriaParcial();
+            aux.append(0, "-");
             robot_.get_trayectoria().set_trayectoria(aux.get_recorrido());
 
         }
